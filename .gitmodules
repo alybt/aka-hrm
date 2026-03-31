@@ -1,4 +1,0 @@
-[submodule "odoo"]
-	path = odoo
-	url = https://github.com/alybt/odoo.git
-	branch = 18.0
