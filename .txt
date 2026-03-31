@@ -1,0 +1,37 @@
+.\venv\Scripts\activate
+
+python odoo\odoo-bin -c odoo.conf -d odoo -c all
+python odoo\odoo-bin -c odoo.conf -d odoo -i hr,hr_payroll,hr_holidays,hr_attendance,account,account_invoicing,hr_expense,fleet
+python odoo\odoo-bin -c odoo.conf -d odoo -i payroll
+python odoo\odoo-bin -c odoo.conf -d odoo -i hr_work_entry,hr_work_entry_contract,hr_work_entry_holidays
+python odoo\odoo-bin shell -c odoo.conf -d your_database_name
+
+expenses = env['hr.expense.sheet'].search([ ('employee_id', '=', emp_id),('include_in_payroll', '=', True)])
+# Search for all payslips not yet 'Done' or 'Cancelled'
+
+
+for slip in draft_slips: print(f"ID: {slip.id} | Number: {slip.number} | Employee: {slip.employee_id.name}")
+
+if expenses:
+    total_reimbursement = sum(expenses.mapped('total_amount'))
+    print(f"Linking {len(expenses)} expenses totaling {total_reimbursement} to Payslip {payslip.number}")
+
+    # 2. Add a manual Input Line to the payslip so the calculation sees it
+    # Note: 'EXP' is the code we will use in your Salary Rule
+    input_type = env['hr.payslip.input.type'].search([('code', '=', 'EXP')], limit=1)
+    if not input_type:
+        input_type = env['hr.payslip.input.type'].create({'name': 'Expenses', 'code': 'EXP'})
+
+    # Create the input line on the payslip
+    env['hr.payslip.input'].create({
+        'payslip_id': payslip.id,
+        'input_type_id': input_type.id,
+        'amount': total_reimbursement,
+    })
+    
+    # 3. Trigger the recompute of the sheet
+    payslip.compute_sheet()
+    env.cr.commit()
+    print("Success: Expenses added and Payslip recomputed.")
+else:
+    print("No matching expenses found to link.")

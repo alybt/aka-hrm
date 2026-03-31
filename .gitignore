@@ -1,0 +1,48 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+
+# Virtual environment
+venv/
+env/
+.env/
+
+# Odoo filestore & sessions (user-uploaded files, can be huge)
+.local/
+filestore/
+sessions/
+
+# Logs
+*.log
+logs/
+
+# Database dumps
+*.sql
+*.dump
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if any frontend build tools)
+node_modules/
+
+# Compiled assets
+/odoo/addons/web/static/lib/
+
+my-odoo-repo/
+├── custom_addons/
+│   ├── my_module_1/
+│   └── my_module_2/
+├── requirements.txt
+├── .gitignore
+└── README.md
