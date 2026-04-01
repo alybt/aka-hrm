@@ -20,4 +20,6 @@
         "reports/hr_employee_ppe_report.xml",
     ],
     "installable": True,
+    "application": True,
+    "auto_install": True,
 }

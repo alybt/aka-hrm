@@ -8,8 +8,7 @@
     "website": "https://github.com/OCA/hr",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "depends": ["hr_contract"],
-    "installable": True,
+    "depends": ["hr_contract"], 
     "data": [
         "security/ir.model.access.csv",
         "security/security.xml",
@@ -18,4 +17,7 @@
     ],
     "demo": ["demo/hr_professional_category_demo.xml"],
     "maintainers": ["victoralmau"],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

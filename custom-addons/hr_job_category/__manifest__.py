@@ -15,4 +15,6 @@
     "depends": ["hr_contract"],
     "data": ["views/hr_view.xml"],
     "installable": True,
+    "application": True,
+    "auto_install": False,
 }

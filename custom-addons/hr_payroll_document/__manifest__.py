@@ -15,4 +15,7 @@
         "data/email_payroll_employee.xml",
         "views/hr_employee_views.xml",
     ],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

@@ -40,7 +40,9 @@
         "wizard/hr_payslip_change_state_view.xml",
         "views/hr_leave_type.xml",
     ],
-    "demo": ["demo/hr_payroll_demo.xml"],
-    "application": True,
+    "demo": ["demo/hr_payroll_demo.xml"], 
     "maintainers": ["appstogrow", "nimarosa"],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

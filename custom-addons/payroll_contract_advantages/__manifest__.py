@@ -13,7 +13,9 @@
         "security/ir.model.access.csv",
         "views/hr_contract_advantage_views.xml",
         "views/hr_contract_views.xml",
-    ],
-    "application": True,
+    ], 
     "maintainers": ["nimarosa"],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

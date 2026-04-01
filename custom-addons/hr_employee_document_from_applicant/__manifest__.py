@@ -11,4 +11,8 @@
     "website": "https://github.com/OCA/hr",
     "depends": ["hr_employee_document", "hr_recruitment"],
     "maintainers": ["ursais"],
+    
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

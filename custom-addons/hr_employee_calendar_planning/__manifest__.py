@@ -6,8 +6,7 @@
     "category": "Human Resources",
     "website": "https://github.com/OCA/hr",
     "author": "Tecnativa,Odoo Community Association (OCA)",
-    "license": "AGPL-3",
-    "installable": True,
+    "license": "AGPL-3", 
     "depends": ["hr"],
     "data": [
         "security/ir.model.access.csv",
@@ -15,5 +14,8 @@
         "views/resource_calendar_views.xml",
     ],
     "post_init_hook": "post_init_hook",
-    "maintainers": ["victoralmau", "pedrobaeza"],
+    "maintainers": ["victoralmau", "pedrobaeza"], 
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

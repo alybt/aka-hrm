@@ -19,4 +19,7 @@
         "views/hr_employee_views.xml",
     ],
     "demo": ["demo/hr_course.xml"],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

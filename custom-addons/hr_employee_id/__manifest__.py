@@ -21,4 +21,6 @@
         "views/res_config_settings_views.xml",
     ],
     "installable": True,
+    "application": True,
+    "auto_install": True,
 }

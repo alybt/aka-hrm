@@ -12,9 +12,9 @@
     "version": "17.0.1.0.0",
     "license": "AGPL-3",
     "depends": ["hr_work_entry"],
-    "data": ["views/res_users.xml"],
-    "installable": True,
-    "application": False,
-    "auto_install": False,
+    "data": ["views/res_users.xml"], 
     "images": ["images/screen.png"],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

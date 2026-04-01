@@ -17,4 +17,7 @@
         "security/ir.model.access.csv",
         "security/hr_employee_medical_examination_security.xml",
     ],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

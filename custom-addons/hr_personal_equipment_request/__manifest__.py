@@ -18,4 +18,7 @@
         "views/hr_personal_equipment_request_views.xml",
         "views/hr_employee_views.xml",
     ],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

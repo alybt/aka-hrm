@@ -20,4 +20,7 @@
         "views/hr_employee.xml",
         "views/hr_employee_relative.xml",
     ],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

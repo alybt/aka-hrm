@@ -11,6 +11,8 @@
     "category": "Human Resources",
     "summary": "Age field for employee",
     "depends": ["hr"],
-    "data": ["views/hr_employee.xml"],
+    "data": ["views/hr_employee.xml"], 
     "installable": True,
+    "application": True,
+    "auto_install": True,
 }

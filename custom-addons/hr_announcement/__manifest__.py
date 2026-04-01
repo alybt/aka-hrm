@@ -12,4 +12,7 @@
     "data": [
         "views/announcement_views.xml",
     ],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

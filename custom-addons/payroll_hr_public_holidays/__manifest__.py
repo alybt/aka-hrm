@@ -13,4 +13,7 @@
     "data": [],
     "installable": True,
     "maintainers": ["nimarosa"],
+    "installable": True,
+    "application": True,
+    "auto_install": False,
 }

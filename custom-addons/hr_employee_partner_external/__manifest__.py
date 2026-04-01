@@ -12,4 +12,7 @@
     "license": "AGPL-3",
     "depends": ["hr"],
     "data": ["views/hr_employee.xml"],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }

@@ -14,4 +14,6 @@
         "views/hr_employee_language.xml",
     ],
     "installable": True,
+    "application": True,
+    "auto_install": True,
 }

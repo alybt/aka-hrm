@@ -15,7 +15,9 @@
         "views/hr_employee_view.xml",
         "views/hr_study_views.xml",
     ],
-    "demo": ["demo/hr_study.xml"],
-    "installable": True,
+    "demo": ["demo/hr_study.xml"], 
     "maintainers": ["victoralmau"],
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }
