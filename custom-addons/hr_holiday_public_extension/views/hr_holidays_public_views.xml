@@ -20,4 +20,8 @@
             </xpath>
         </field>
     </record>
+    <menuitem id="menu_holiday_types"
+        name="Holiday Types"
+        parent="hr_holidays.menu_hr_holidays_configuration"
+        sequence="25"/>
 </odoo>
