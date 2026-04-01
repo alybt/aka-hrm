@@ -1,7 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo.addons.payment.tests.common import PaymentCommon
-
+import os
 
 class StripeCommon(PaymentCommon):
 
@@ -11,8 +11,8 @@ class StripeCommon(PaymentCommon):
 
         cls.stripe = cls._prepare_provider('stripe', update_values={
             'stripe_secret_key': 'sk_test_KJtHgNwt2KS3xM7QJPr4O5E8',
-            'stripe_publishable_key': 'pk_test_QSPnimmb4ZhtkEy3Uhdm4S6J',
-            'stripe_webhook_secret': 'whsec_vG1fL6CMUouQ7cObF2VJprLVXT5jBLxB',
+            'stripe_publishable_key': os.getenv('STRIPE_SECRET_KEY', 'dummy_secret_key'),
+            'stripe_webhook_secret': os.getenv('STRIPE_WEBHOOK_SECRET', 'dummy_secret_key'),
             'payment_method_ids': [(5, 0, 0)],
         })
 

@@ -30,6 +30,9 @@ class MockSmsTwilioApi(SMSCase):
             cls.mock_company = cls.env.company
         cls.mock_number = False
         cls.mock_sms_uuid = 'NA'
+        cls.twilio_sid = os.getenv('TWILIO_ACCOUNT_SID', 'DUMMY_SID')
+        cls.twilio_token = os.getenv('TWILIO_AUTH_TOKEN', 'DUMMY_TOKEN')
+
 
         # find details of outgoing requests
         cls.twilio_request_re = re.compile(r"https://api.twilio.com/2010-04-01/Accounts/(AC[\d]{32})/(.*)")
@@ -47,7 +50,7 @@ class MockSmsTwilioApi(SMSCase):
             'To': '+32486321321',
         }
         cls.request_send_ok_json = {
-            "account_sid": "AC12345678987654321234567898765432",
+            "account_sid": "cls.twilio_sid",
             "api_version": "2010-04-01",
             "date_created": "Mon, 14 Apr 2025 09:27:41 +0000",
             "date_sent": None,

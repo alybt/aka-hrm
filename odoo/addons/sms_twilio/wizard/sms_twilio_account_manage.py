@@ -18,7 +18,12 @@ class SmsTwilioAccountManage(models.TransientModel):
     sms_twilio_account_sid = fields.Char(related='company_id.sms_twilio_account_sid', readonly=False)
     sms_twilio_auth_token = fields.Char(related='company_id.sms_twilio_auth_token', readonly=False)
     sms_twilio_number_ids = fields.One2many(related='company_id.sms_twilio_number_ids', readonly=False)
-    test_number = fields.Char("Test Number")
+    test_number = fields.Char("Test Number") 
+    def _get_default_sid(self):
+        return self.env['ir.config_parameter'].sudo().get_param('twilio_sid_secret')
+
+    twilio_account_sid = fields.Char(string="SID", default=_get_default_sid)
+    twilio_auth_token = fields.Char(string="Token")
 
     def action_reload_numbers(self):
         """Fetch the available numbers from Twilio account"""
