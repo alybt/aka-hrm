@@ -6,3 +6,4 @@ python odoo\odoo-bin -c odoo.conf -d odoo -i payroll
 python odoo\odoo-bin -c odoo.conf -d odoo -i hr_work_entry,hr_work_entry_contract,hr_work_entry_holidays
 python odoo\odoo-bin shell -c odoo.conf -d your_database_name
 
+python odoo\odoo-bin -c odoo.conf -u custom_work_entries --stop-after-init
