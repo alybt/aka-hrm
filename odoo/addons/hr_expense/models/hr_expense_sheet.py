@@ -31,18 +31,7 @@ class HrExpenseSheet(models.Model):
     _order = "accounting_date desc, id desc"
     _check_company_auto = True
 
-    include_in_payroll = fields.Boolean(
-        string="Include in Payroll", 
-        copy=False,
-        help="Check this to reimburse this expense through the employee's payslip."
-    )
-
     @api.model
-    def action_mark_as_reimbursed_in_payroll(self):
-        """ Call this once the payslip is validated to close the expenses """
-        # We use 'done' because in Odoo 17, 'done' is the state for 'Paid'
-        self.filtered(lambda s: s.include_in_payroll).write({'state': 'done'})
-
     def _default_employee_id(self):
         return self.env.user.employee_id
 

@@ -24,8 +24,6 @@ class HrExpense(models.Model):
             raise ValidationError(_('The current user has no related employee. Please, create one.'))
         return employee
 
-
-
     name = fields.Char(
         string="Description",
         compute='_compute_name', precompute=True, store=True, readonly=False,
