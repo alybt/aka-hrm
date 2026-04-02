@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from datetime import timedelta
+from datetime import timedelta, date
+import calendar
 
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
@@ -11,37 +12,39 @@ class HrPayslip(models.Model):
         store=True
     )
 
-    @api.depends('date_from', 'date_to', 'employee_id')
+    @api.depends('date_from', 'employee_id')
     def _compute_regular_days(self):
         for rec in self:
             rec.x_regular_days = 0
-
-            if not rec.date_from or not rec.date_to or not rec.employee_id:
+            if not rec.date_from or not rec.employee_id:
                 continue
 
-            # ❗ enforce same month
-            if rec.date_from.month != rec.date_to.month:
-                raise ValidationError("Payslip must be within one month only.")
-
-            calendar = rec.employee_id.resource_calendar_id
-            if not calendar:
+            calendar_res = rec.employee_id.resource_calendar_id
+            if not calendar_res:
                 continue
 
-            # count working days
+            year = rec.date_from.year
+            month = rec.date_from.month
+            
+            _, last_day = calendar.monthrange(year, month)
+            
+            month_start = date(year, month, 1)
+            month_end = date(year, month, last_day)
+
             work_days = 0
-            current = rec.date_from
+            current = month_start
 
-            while current <= rec.date_to:
-                weekday = str(current.weekday())
-                if any(att.dayofweek == weekday for att in calendar.attendance_ids):
+            allowed_weekdays = [int(att.dayofweek) for att in calendar_res.attendance_ids]
+
+            while current <= month_end:
+                if current.weekday() in allowed_weekdays:
                     work_days += 1
                 current += timedelta(days=1)
 
-            # get holidays
             holidays = self.env['resource.calendar.leaves'].search([
-                ('calendar_id', '=', calendar.id),
-                ('date_from', '<=', rec.date_to),
-                ('date_to', '>=', rec.date_from),
+                ('calendar_id', '=', calendar_res.id),
+                ('date_from', '<=', fields.Datetime.to_string(datetime.combine(month_end, datetime.max.time()))),
+                ('date_to', '>=', fields.Datetime.to_string(datetime.combine(month_start, datetime.min.time()))),
             ])
 
             holiday_days = sum(1 for h in holidays if h.x_holiday_types)
