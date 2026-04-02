@@ -3,7 +3,7 @@ from odoo import fields, models
 class ResourceCalendarLeaves(models.Model):
     _inherit = 'resource.calendar.leaves'
 
-    holiday_type = fields.Selection([
+    x_holiday_types = fields.Selection([
         ('regular', 'Regular Holiday'),
         ('special_non_working', 'Special Non-Working Day'),
         ('special_working', 'Special Working Day'),
