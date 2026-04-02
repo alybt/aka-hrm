@@ -8,9 +8,8 @@
     "summary": "Manage your payroll to accounting",
     "author": "Odoo SA, Odoo Community Association (OCA)",
     "depends": ["payroll", 
-                "account"
-                'hr_work_entry', 
-                'hr_work_entry_contract_attendance',
+                "account",
+                "hr_work_entry",
                 ],
     "data": ["views/hr_payroll_account_views.xml"],
     "demo": ["demo/hr_payroll_account_demo.xml"],

@@ -1,0 +1,11 @@
+<record id="resource_calendar_leave_form_inherit_ph" model="ir.ui.view">
+    <field name="name">resource.calendar.leaves.form.inherit.ph</field>
+    <field name="model">resource.calendar.leaves</field>
+    <field name="inherit_id" ref="resource.resource_calendar_leave_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='name']" position="after">
+            <field name="holiday_type" widget="priority" invisible="not work_entry_type_id"/>
+            <field name="work_entry_type_id" required="1"/>
+        </xpath>
+    </field>
+</record>
