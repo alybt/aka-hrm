@@ -20,11 +20,4 @@
         <is_leave>True</is_leave>
         <color>2</color>
     </record>
-
-    <record id="work_entry_type_ph_local" model="hr.work.entry.type">
-        <name>Local Holiday (PH)</name>
-        <code>LEAVE_PH_LOC</code>
-        <is_leave>True</is_leave>
-        <color>1</color>
-    </record>
 </odoo>

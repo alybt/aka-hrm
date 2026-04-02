@@ -9,3 +9,5 @@ python odoo\odoo-bin shell -c odoo.conf -d your_database_name
 python odoo\odoo-bin -c odoo.conf -u custom_work_entries --stop-after-init
 
 .\venv\Scripts\python.exe odoo\odoo-bin -c odoo.conf -d odoo -i all
+.\venv\Scripts\python.exe odoo\odoo-bin -c odoo.conf -d odoo -i ph_holiday_types --stop-after-init
+.\venv\Scripts\python.exe -m pip install jingtrang

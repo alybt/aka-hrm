@@ -10,7 +10,7 @@
         'hr_holidays'],
     'data': [
         'data/hr_work_entry_type_data.xml',
-        'views/resource_calendar_leaves_views.xml',
+        # 'views/resource_calendar_leaves_views.xml',
     ],
     "maintainers": ["nimarosa"],
     "installable": True,
