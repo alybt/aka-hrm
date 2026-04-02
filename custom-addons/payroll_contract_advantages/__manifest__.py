@@ -8,7 +8,10 @@
     "summary": "Allow to define contract advantages for employees.",
     "license": "LGPL-3",
     "author": "Nimarosa, Odoo Community Association (OCA)",
-    "depends": ["hr_contract", "payroll"],
+    "depends": ["hr_contract", 
+                "payroll",
+                "hr_work_entry",
+                ],
     "data": [
         "security/ir.model.access.csv",
         "views/hr_contract_advantage_views.xml",

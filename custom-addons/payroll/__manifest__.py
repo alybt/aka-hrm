@@ -13,6 +13,7 @@
         "hr_contract",
         "hr_holidays",
         "mail",
+        "hr_work_entry",
     ],
     "data": [
         "security/hr_payroll_security.xml",
