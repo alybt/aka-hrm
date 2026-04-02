@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="resource_calendar_leave_form_inherit_ph" model="ir.ui.view">
-        <field name="name">resource.calendar.leaves.form.inherit.ph</field>
+    <record id="resource_calendar_leave_tree_inherit_ph" model="ir.ui.view">
+        <field name="name">resource.calendar.leaves.tree.inherit.ph</field>
         <field name="model">resource.calendar.leaves</field>
-        <field name="inherit_id" ref="resource.resource_calendar_leave_form"/>
+        <field name="inherit_id" ref="resource.resource_calendar_leave_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
-                <field name="holiday_type"/>
+                <field name="x_holiday_types" string="PH Holiday Type" optional="show"/>
             </xpath>
         </field>
     </record>

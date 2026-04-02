@@ -1,5 +1,5 @@
 .\venv\Scripts\activate
-
+.\venv\Scripts\Activate.ps1
 python odoo\odoo-bin -c odoo.conf -d odoo -i all
 python odoo\odoo-bin -c odoo.conf -d odoo -i hr,hr_payroll,hr_holidays,hr_attendance,account,account_invoicing,hr_expense,fleet
 python odoo\odoo-bin -c odoo.conf -d odoo -i payroll
@@ -11,3 +11,7 @@ python odoo\odoo-bin -c odoo.conf -u custom_work_entries --stop-after-init
 .\venv\Scripts\python.exe odoo\odoo-bin -c odoo.conf -d odoo -i all
 .\venv\Scripts\python.exe odoo\odoo-bin -c odoo.conf -d odoo -i ph_holiday_types --stop-after-init
 .\venv\Scripts\python.exe -m pip install jingtrang
+python odoo-bin -c your_config.conf -d your_database_name -u ph_holiday_types --stop-after-init
+python odoo-bin -c your_config.conf -d your_db_name -i ph_holiday_types --log-level=debug
+
+.\venv\Scripts\python.exe odoo\odoo-bin shell -c odoo.conf -d odoo
