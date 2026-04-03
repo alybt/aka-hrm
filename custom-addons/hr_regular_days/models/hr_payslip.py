@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from datetime import timedelta, date
+from datetime import datetime, timedelta, date
 import calendar
 
 class HrPayslip(models.Model):
@@ -23,6 +23,7 @@ class HrPayslip(models.Model):
             if not calendar_res:
                 continue
 
+            # Year and Month logic
             year = rec.date_from.year
             month = rec.date_from.month
             
@@ -33,7 +34,6 @@ class HrPayslip(models.Model):
 
             work_days = 0
             current = month_start
-
             allowed_weekdays = [int(att.dayofweek) for att in calendar_res.attendance_ids]
 
             while current <= month_end:
@@ -48,5 +48,4 @@ class HrPayslip(models.Model):
             ])
 
             holiday_days = sum(1 for h in holidays if h.x_holiday_types)
-
             rec.x_regular_days = work_days - holiday_days
