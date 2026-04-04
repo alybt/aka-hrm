@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_form_inherit_attendance" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit.attendance</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main_info']" position="after">
+                <group string="Attendance &amp; Undertime Metrics" name="attendance_metrics">
+                    <group>
+                        <field name="x_absent_days" widget="float_time" string="Absent Days"/>
+                        <field name="x_undertime" widget="float_time" string="Late/Undertime (Hrs)"/>
+                    </group>
+                    <group>
+                        <field name="x_undertime_overall" widget="float_time" decoration-danger="x_undertime_overall > 0" string="Total Lost Hours"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
