@@ -16,5 +16,5 @@
     "data": ["views/hr_view.xml"],
     "installable": True,
     "application": True,
-    "auto_install": False,
+    "auto_install": True,
 }
