@@ -7,7 +7,8 @@
     'data': [
         'views/resource_calendar_leaves_views.xml',
     ],
-    'installable': True,
-    'application': False,
+    "installable": True,
+    "application": True,
+    "auto_install": True,
     'license': 'LGPL-3',
 }
