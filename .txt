@@ -13,5 +13,12 @@ python odoo\odoo-bin -c odoo.conf -u custom_work_entries --stop-after-init
 .\venv\Scripts\python.exe -m pip install jingtrang
 python odoo-bin -c your_config.conf -d your_database_name -u ph_holiday_types --stop-after-init
 python odoo-bin -c your_config.conf -d your_db_name -i ph_holiday_types --log-level=debug
+# Find the ghost module (replace 'your_module_name' with the actual folder name)
+module = self.env['ir.module.module'].search([('name', '=', 'your_module_name')])
 
+# Force it to uninstall
+module.button_immediate_uninstall()
+
+# Commit the change to the database
+self.env.cr.commit()
 .\venv\Scripts\python.exe odoo\odoo-bin shell -c odoo.conf -d odoo
