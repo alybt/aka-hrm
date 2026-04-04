@@ -28,7 +28,7 @@ The classification appears on:
     'data': [
         'views/resource_calendar_leaves_views.xml',
     ],
-    'installable': True,
-    'auto_install': False,
-    'application': False,
+    "installable": True,
+    "application": True,
+    "auto_install": True,
 }
