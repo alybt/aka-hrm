@@ -22,3 +22,8 @@ module.button_immediate_uninstall()
 # Commit the change to the database
 self.env.cr.commit()
 .\venv\Scripts\python.exe odoo\odoo-bin shell -c odoo.conf -d odoo
+
+
+
+Monthly Wage: result = contract.wage
+Daily Rate: result = payslip.x_salary_daily
