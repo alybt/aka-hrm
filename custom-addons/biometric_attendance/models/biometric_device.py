@@ -30,7 +30,7 @@ class BiometricDevice(models.Model):
     total_users = fields.Integer(string='Total Registered Users', compute='_compute_total_users')
     
     company_id = fields.Many2one('res.company', string='Company', 
-                                 default=lambda self: self.env.company)
+                                    default=lambda self: self.env.company)
     active = fields.Boolean(string='Active', default=True)
     
     # Device configuration

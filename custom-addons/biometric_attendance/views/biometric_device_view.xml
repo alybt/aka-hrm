@@ -94,5 +94,5 @@
 
     <menuitem id="menu_biometric_root" name="Biometrics" sequence="10"/>
     <menuitem id="menu_biometric_devices" name="Devices" parent="menu_biometric_root" 
-              action="action_biometric_device" sequence="10"/>
+                action="action_biometric_device" sequence="10"/>
 </odoo>
