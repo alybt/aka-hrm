@@ -12,7 +12,7 @@ from odoo import models
 from odoo.tools.float_utils import float_round
 
 from odoo.addons.resource.models.utils import Intervals
-import fields
+
 
 class ResourceCalendar(models.Model):
     _inherit = "resource.calendar"

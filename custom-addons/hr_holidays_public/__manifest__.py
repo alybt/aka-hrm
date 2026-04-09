@@ -4,7 +4,7 @@
 
 {
     "name": "HR Holidays Public",
-    "version": "17.0.1.0.10",
+    "version": "17.0.1.0.11",
     "license": "AGPL-3",
     "category": "Human Resources",
     "author": "Michael Telahun Makonnen, "
@@ -23,6 +23,4 @@
         "wizards/holidays_public_next_year_wizard.xml",
     ],
     "installable": True,
-    "application": True,
-    "auto_install": False,
 }

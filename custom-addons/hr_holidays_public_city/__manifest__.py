@@ -11,9 +11,7 @@
     "depends": ["hr_holidays_public", "base_address_extended"],
     "data": [
         "views/hr_holidays_public_view.xml",
-    ], 
-    "maintainers": ["victoralmau"],
+    ],
     "installable": True,
-    "application": True,
-    "auto_install": True,
+    "maintainers": ["victoralmau"],
 }

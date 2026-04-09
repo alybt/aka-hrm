@@ -11,7 +11,4 @@
     "website": "https://github.com/OCA/hr-holidays",
     "depends": ["hr_holidays"],
     "data": ["views/hr_leave.xml"],
-    "installable": True,
-    "application": True,
-    "auto_install": False,
 }
