@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Absence Count Wizard Form -->
+    <record id="view_hr_absence_count_form" model="ir.ui.view">
+        <field name="name">hr.absence.count.form</field>
+        <field name="model">hr.absence.count</field>
+        <field name="arch" type="xml">
+            <form string="Count Employee Absences">
+                <group>
+                    <group>
+                        <field name="employee_id" options="{'no_create': True}"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group string="Results">
+                        <field name="working_days" widget="float_time"/>
+                        <field name="holiday_days" widget="float_time"/>
+                        <field name="absence_days" widget="float_time"/>
+                        <field name="attendance_days" widget="float_time"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Absence Report Form -->
+    <record id="view_hr_absence_report_form" model="ir.ui.view">
+        <field name="name">hr.absence.report.form</field>
+        <field name="model">hr.absence.report</field>
+        <field name="arch" type="xml">
+            <form string="Absence Report">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Absence Report for <field name="employee_id"/></h1>
+                        <p>Holidays configured in resource.calendar.leaves with PH Holiday Types are automatically excluded from absence counting.</p>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="created_by"/>
+                            <field name="create_date"/>
+                        </group>
+                        <group string="Summary">
+                            <field name="working_days" widget="float_time"/>
+                            <field name="holiday_days" widget="float_time" style="color: green;"/>
+                            <field name="absence_days" widget="float_time" style="color: red; font-weight: bold;"/>
+                            <field name="attendance_days" widget="float_time" style="color: blue;"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_view_details" string="View Daily Breakdown" type="object" class="btn-primary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Absence Report Tree -->
+    <record id="view_hr_absence_report_tree" model="ir.ui.view">
+        <field name="name">hr.absence.report.tree</field>
+        <field name="model">hr.absence.report</field>
+        <field name="arch" type="xml">
+            <tree string="Absence Reports">
+                <field name="employee_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="working_days" widget="float_time"/>
+                <field name="holiday_days" widget="float_time"/>
+                <field name="absence_days" widget="float_time"/>
+                <field name="attendance_days" widget="float_time"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Absence Detail Tree -->
+    <record id="view_hr_absence_detail_tree" model="ir.ui.view">
+        <field name="name">hr.absence.detail.tree</field>
+        <field name="model">hr.absence.detail</field>
+        <field name="arch" type="xml">
+            <tree string="Daily Breakdown">
+                <field name="date"/>
+                <field name="day_type" widget="badge" decoration-success="day_type == 'attended'" 
+                       decoration-danger="day_type == 'absent'" 
+                       decoration-info="day_type == 'holiday'"/>
+                <field name="holiday_type" string="Holiday Type"/>
+                <field name="leave_id" string="Leave Request"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_hr_absence_root" name="Absence Management" parent="hr.menu_hr_root" sequence="50"/>
+    
+    <menuitem id="menu_hr_absence_reports" name="Absence Reports" parent="menu_hr_absence_root" sequence="10"/>
+    <menuitem id="menu_hr_absence_report_action" name="All Reports" parent="menu_hr_absence_reports" 
+              action="action_hr_absence_report" sequence="10"/>
+    
+    <record id="action_hr_absence_report" model="ir.actions.act_window">
+        <field name="name">Absence Reports</field>
+        <field name="res_model">hr.absence.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Generate absence reports to track employee absences
+            </p>
+            <p>
+                <strong>Note:</strong> Holidays configured in Calendar Leaves with PH Holiday Types 
+                (Regular Holiday, Special Non-Working Day, Special Working Day, Local Holiday) 
+                are automatically excluded from absence counting.
+            </p>
+        </field>
+    </record>
+</odoo>

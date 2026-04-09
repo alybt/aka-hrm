@@ -27,3 +27,6 @@ self.env.cr.commit()
 
 Monthly Wage: result = contract.wage
 Daily Rate: result = payslip.x_salary_daily
+
+
+Biometrics 

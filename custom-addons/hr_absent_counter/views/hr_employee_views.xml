@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add absence fields to employee form -->
+    <record id="view_employee_absence_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.absence.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="absence_counter" string="Absences">
+                    <group>
+                        <group>
+                            <field name="last_absence_count" string="Last Absence Count"/>
+                            <field name="total_absences_year" string="Total Absences (Year)"/>
+                            <button name="action_count_absences" string="Count Absences" type="object" class="btn-primary"/>
+                            <button name="action_view_absence_reports" string="View Reports" type="object"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
