@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add absence fields to payslip form -->
+    <record id="view_payslip_absence_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.absence.form.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="absence_details" string="Absence &amp; Holiday Details">
+                    <group>
+                        <group>
+                            <field name="total_working_days_period" string="Working Days in Period" widget="float_time"/>
+                            <field name="total_holiday_days" string="Holiday Days (Excluded)" widget="float_time"/>
+                            <field name="total_absence_days" string="Absence Days" widget="float_time" style="color: red;"/>
+                        </group>
+                        <group>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="contract_id" readonly="1"/>
+                            <label for="absence_details_ids"/>
+                            <field name="absence_details_ids">
+                                <tree string="Daily Breakdown" editable="False">
+                                    <field name="date"/>
+                                    <field name="day_type" widget="badge" 
+                                            decoration-success="day_type == 'present'"
+                                            decoration-danger="day_type == 'absent'"
+                                            decoration-info="day_type == 'holiday'"/>
+                                    <field name="holiday_name" string="Holiday"/>
+                                    <field name="holiday_type" string="Holiday Type"/>
+                                    <field name="leave_type" string="Leave Type"/>
+                                    <field name="absence_days" widget="float_time"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add to payslip tree view -->
+    <record id="view_payslip_absence_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.absence.tree.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="total_absence_days" string="Absence Days" widget="float_time"/>
+                <field name="total_holiday_days" string="Holiday Days" widget="float_time"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Absence Detail View -->
+    <record id="view_hr_payslip_absence_detail_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.absence.detail.tree</field>
+        <field name="model">hr.payslip.absence.detail</field>
+        <field name="arch" type="xml">
+            <tree string="Absence Details" editable="False">
+                <field name="date"/>
+                <field name="day_type" widget="badge"/>
+                <field name="holiday_name"/>
+                <field name="holiday_type"/>
+                <field name="leave_type"/>
+                <field name="absence_days"/>
+            </tree>
+        </field>
+    </record>
+</odoo>
