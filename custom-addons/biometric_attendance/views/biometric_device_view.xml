@@ -1,98 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Tree View for Biometric Devices -->
     <record id="view_biometric_device_tree" model="ir.ui.view">
         <field name="name">biometric.device.tree</field>
         <field name="model">biometric.device</field>
         <field name="arch" type="xml">
-            <tree string="Biometric Devices">
-                <field name="device_name"/>
-                <field name="device_ip"/>
-                <field name="device_model"/>
-                <field name="device_status"/>
-                <field name="total_users"/>
-                <field name="last_sync"/>
+            <tree>
+                <field name="name"/>
+                <field name="device_type"/>
+                <field name="connection_type"/>
+                <field name="ip_address" invisible="1"/>
+                <field name="connection_status" widget="badge" 
+                        decoration-danger="connection_status == 'error'"
+                        decoration-success="connection_status == 'connected'"
+                        decoration-warning="connection_status == 'disconnected'"/>
+                <field name="is_active"/>
+                <field name="auto_sync"/>
             </tree>
         </field>
     </record>
 
+    <!-- Form View for Biometric Devices -->
     <record id="view_biometric_device_form" model="ir.ui.view">
         <field name="name">biometric.device.form</field>
         <field name="model">biometric.device</field>
         <field name="arch" type="xml">
-            <form string="Biometric Device">
+            <form>
+                <header>
+                    <button name="action_test_connection" type="object" 
+                            string="Test Connection" class="btn-primary"
+                            icon="fa-plug"/>
+                    <button name="action_import_attendance" type="object" 
+                            string="Import Attendance" 
+                            class="btn-secondary"
+                            icon="fa-upload"/>
+                </header>
                 <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="action_test_connection" type="object" 
-                                class="oe_stat_button" icon="fa-plug"
-                                help="Test device connection">
-                            <div class="o_stat_info">
-                                <field name="device_status" widget="badge"/>
-                                <span class="o_stat_text">Test Connection</span>
-                            </div>
-                        </button>
-                        <button name="action_sync_users" type="object" 
-                                class="oe_stat_button" icon="fa-users"
-                                help="Synchronize users">
-                            <div class="o_stat_info">
-                                <field name="total_users"/>
-                                <span class="o_stat_text">Users</span>
-                            </div>
-                        </button>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Device Name..."/>
+                        </h1>
                     </div>
                     <group>
-                        <group>
-                            <field name="device_name"/>
-                            <field name="device_ip"/>
-                            <field name="device_port"/>
-                            <field name="device_model"/>
-                        </group>
-                        <group>
-                            <field name="device_serial"/>
-                            <field name="device_status"/>
-                            <field name="last_sync"/>
+                        <group string="Device Information">
+                            <field name="device_type"/>
+                            <field name="connection_type"/>
+                            <field name="is_active"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
+                        <group string="Status">
+                            <field name="connection_status" widget="badge"/>
+                            <field name="last_connection"/>
+                            <field name="timeout"/>
+                        </group>
                     </group>
-                    <notebook>
-                        <page string="Configuration">
-                            <group>
-                                <field name="auto_sync"/>
-                                <field name="sync_interval" attrs="{'invisible': [('auto_sync', '=', False)]}"/>
-                                <field name="device_timeout"/>
-                                <field name="retry_attempts"/>
-                            </group>
-                        </page>
-                        <page string="Registered Users">
-                            <field name="biometric_user_ids">
-                                <tree>
-                                    <field name="employee_id"/>
-                                    <field name="registration_status"/>
-                                    <field name="registration_date"/>
-                                    <field name="fingerprint_count"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
+                    
+                    <!-- Network Configuration -->
+                    <group string="Network Settings" 
+                            attrs="{'invisible': [('connection_type', 'not in', ['network', 'http_api'])]}">
+                        <field name="ip_address" placeholder="192.168.1.100"/>
+                        <field name="port"/>
+                        <field name="api_key" password="True" 
+                                attrs="{'invisible': [('connection_type', '!=', 'http_api')]}"/>
+                    </group>
+                    
+                    <!-- Database Configuration -->
+                    <group string="Database Settings" 
+                            attrs="{'invisible': [('connection_type', '!=', 'database')]}">
+                        <field name="database_host" placeholder="localhost"/>
+                        <field name="database_name"/>
+                        <field name="database_user"/>
+                        <field name="database_password" password="True"/>
+                    </group>
+                    
+                    <!-- Serial Configuration -->
+                    <group string="Serial Settings" 
+                            attrs="{'invisible': [('connection_type', '!=', 'serial')]}">
+                        <field name="serial_port"/>
+                        <field name="baud_rate"/>
+                    </group>
+                    
+                    <!-- Synchronization Settings -->
+                    <group string="Synchronization" name="sync_settings">
+                        <field name="auto_sync"/>
+                        <field name="sync_interval" 
+                                attrs="{'invisible': [('auto_sync', '=', False)]}"/>
+                    </group>
                 </sheet>
             </form>
         </field>
     </record>
 
+    <!-- Action and Menu for Biometric Devices -->
     <record id="action_biometric_device" model="ir.actions.act_window">
         <field name="name">Biometric Devices</field>
         <field name="res_model">biometric.device</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Configure your biometric fingerprint devices
+                Configure biometric devices to integrate with employee attendance
             </p>
             <p>
-                Add your fingerprint scanners to automatically track employee attendance.
+                Connect ZKTeco, Hikvision, or other biometric devices to automatically
+                import attendance records and sync employee data.
             </p>
         </field>
     </record>
 
-    <menuitem id="menu_biometric_root" name="Biometrics" sequence="10"/>
-    <menuitem id="menu_biometric_devices" name="Devices" parent="menu_biometric_root" 
-                action="action_biometric_device" sequence="10"/>
+    <menuitem id="menu_biometric_root" 
+                name="Biometric" 
+                parent="hr.menu_hr_root"
+                sequence="15"/>
+    
+    <menuitem id="menu_biometric_device" 
+                name="Devices" 
+                parent="menu_biometric_root"
+                action="action_biometric_device"
+                sequence="10"/>
+    
+    <menuitem id="menu_attendance_import" 
+                name="Attendance Imports" 
+                parent="menu_biometric_root"
+                action="action_attendance_import"
+                sequence="20"/>
 </odoo>

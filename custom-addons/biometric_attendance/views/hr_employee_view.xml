@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Employee Form View -->
+    <record id="view_hr_employee_form_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Biometric Access" name="biometric_page">
+                    <group string="Biometric Configuration">
+                        <group>
+                            <field name="biometric_enabled"/>
+                            <field name="biometric_id" 
+                                   placeholder="Enter ID from biometric device"
+                                   attrs="{'required': [('biometric_enabled', '=', True)]}"/>
+                            <field name="biometric_verification_method"/>
+                            <field name="last_biometric_sync"/>
+                        </group>
+                        <group>
+                            <field name="biometric_device_ids" 
+                                   widget="many2many_tags"
+                                   options="{'no_create': False}"/>
+                            <button name="action_sync_biometric_data" 
+                                    type="object" 
+                                    string="Sync Now" 
+                                    class="btn-primary"
+                                    icon="fa-refresh"/>
+                        </group>
+                    </group>
+                    <group string="Recent Biometric Activity" name="biometric_activity">
+                        <!-- You can add a tree view of recent biometric logs here -->
+                        <field name="attendance_ids" 
+                               context="{'default_employee_id': active_id}"
+                               limit="10">
+                            <tree string="Recent Attendance">
+                                <field name="check_in"/>
+                                <field name="check_out"/>
+                                <field name="worked_hours" sum="Total Hours"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Biometric ID to Employee Tree View -->
+    <record id="view_hr_employee_tree_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="department_id" position="after">
+                <field name="biometric_id"/>
+                <field name="biometric_enabled"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add filter for biometric-enabled employees -->
+    <record id="view_hr_employee_filter_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.filter.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="Biometric Enabled" 
+                        name="biometric_enabled" 
+                        domain="[('biometric_enabled', '=', True)]"/>
+                <separator/>
+                <filter string="Missing Biometric ID" 
+                        name="no_biometric" 
+                        domain="[('biometric_id', '=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

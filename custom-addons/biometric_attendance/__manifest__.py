@@ -1,26 +1,24 @@
 {
-    'name': 'Biometric Fingerprint Attendance',
+    'name': 'Biometric Attendance Integration',
     'version': '17.0.1.0.0',
     'category': 'Human Resources/Attendance',
-    'summary': 'Biometric fingerprint scanner integration for employee attendance',
+    'summary': 'Integrate biometric devices with employee attendance',
     'description': """
-        This module integrates biometric fingerprint devices with Odoo Attendance.
-        Features:
-        - Support for multiple fingerprint devices
-        - Real-time attendance logging
-        - Fingerprint template management
-        - Automatic attendance calculation
-        - Device synchronization
+        This module adds biometric integration capabilities to Odoo:
+        - Biometric ID field on Employee form
+        - Device configuration for biometric hardware
+        - Attendance import from biometric exports
+        - Support for multiple biometric device types
     """,
     'author': 'Your Company',
-    'website': 'https://yourcompany.com',
-    'depends': ['base', 'hr_attendance', 'hr'],
+    'website': 'https://your-website.com',
+    'depends': ['hr_attendance', 'hr'],
     'data': [
         'security/ir.model.access.csv',
-        'views/biometric_device_view.xml',
-        'views/biometric_attendance_view.xml',
-        'views/hr_employee_view.xml',
-        'data/biometric_cron.xml',
+        'views/hr_employee_views.xml',
+        'views/biometric_device_views.xml',
+        'views/attendance_import_views.xml',
+        'data/demo_data.xml',
     ],
     'demo': [],
     'installable': True,

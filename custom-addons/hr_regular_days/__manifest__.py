@@ -8,7 +8,7 @@
         'views/hr_payslip_view.xml',
     ],
     'installable': True,
-    'application': False,
-    "auto_install": True,
+    'application': True,
+    "auto_install": False,
     'license': 'LGPL-3',
 }

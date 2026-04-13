@@ -1,25 +1,68 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
     
-    biometric_user_ids = fields.One2many('biometric.user', 'employee_id', string='Biometric Registrations')
-    has_biometric = fields.Boolean(string='Has Biometric Registration', compute='_compute_has_biometric')
+    biometric_id = fields.Char(
+        string='Biometric ID',
+        help='Unique identifier from biometric device',
+        copy=False,
+        index=True
+    )
     
-    @api.depends('biometric_user_ids')
-    def _compute_has_biometric(self):
+    biometric_enabled = fields.Boolean(
+        string='Biometric Access Enabled',
+        default=True,
+        help='Enable biometric attendance for this employee'
+    )
+    
+    biometric_device_ids = fields.Many2many(
+        'biometric.device',
+        string='Registered Devices',
+        help='Biometric devices where this employee is registered'
+    )
+    
+    last_biometric_sync = fields.Datetime(
+        string='Last Biometric Sync',
+        readonly=True
+    )
+    
+    biometric_verification_method = fields.Selection([
+        ('fingerprint', 'Fingerprint'),
+        ('face', 'Face Recognition'),
+        ('card', 'RFID Card'),
+        ('pin', 'PIN Code'),
+        ('multi', 'Multi-Factor')
+    ], string='Verification Method', default='fingerprint')
+    
+    @api.constrains('biometric_id')
+    def _check_biometric_id(self):
         for employee in self:
-            employee.has_biometric = bool(employee.biometric_user_ids.filtered(
-                lambda u: u.registration_status == 'registered'
-            ))
+            if employee.biometric_id:
+                existing = self.search([
+                    ('biometric_id', '=', employee.biometric_id),
+                    ('id', '!=', employee.id)
+                ])
+                if existing:
+                    raise ValidationError(
+                        f'Biometric ID {employee.biometric_id} is already assigned '
+                        f'to employee {existing[0].name}'
+                    )
     
-    def action_register_biometric(self):
-        """Open wizard to register employee for biometrics"""
+    def action_sync_biometric_data(self):
+        """Manual sync button action"""
+        for employee in self:
+            employee.last_biometric_sync = fields.Datetime.now()
+            # Trigger sync logic here
+            _logger.info(f"Synced biometric data for employee {employee.name}")
         return {
-            'name': 'Register Biometric',
-            'type': 'ir.actions.act_window',
-            'res_model': 'biometric.user.create.wizard',
-            'view_mode': 'form',
-            'target': 'new',
-            'context': {'default_employee_id': self.id}
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Biometric data sync initiated',
+                'type': 'rainbow_man',
+            }
         }
