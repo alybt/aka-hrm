@@ -14,48 +14,48 @@ class HrPayslip(models.Model):
     def _compute_absent_days(self):
         for slip in self:
             absent_days = 0
-
+            
             if not slip.date_from or not slip.date_to or not slip.employee_id:
                 slip.x_absent_days = 0
                 continue
-
-            # Get contract
-            contract = slip.contract_id
-            if not contract or not contract.resource_calendar_id:
-                slip.x_absent_days = 0
-                continue
-
-            calendar = contract.resource_calendar_id
-
+            
             current_date = slip.date_from
-
             while current_date <= slip.date_to:
-
-                # Check if it's a working day
-                weekday = str(current_date.weekday())  # 0 = Monday
-
-                working = any(
-                    att.dayofweek == weekday
-                    for att in calendar.attendance_ids
-                )
-
-                if working:
-                    # Check if there is a work entry
-                    work_entries = self.env['hr.work.entry'].search([
+                # Check if the day is a working day
+                if self._is_working_day(slip.contract_id.resource_calendar_id, current_date):
+                    # Check for attendance on this day
+                    attendances = self.env['hr.attendance'].search([
                         ('employee_id', '=', slip.employee_id.id),
-                        ('date_start', '<=', current_date),
-                        ('date_stop', '>=', current_date),
+                        ('check_in', '>=', current_date),
+                        ('check_in', '<', current_date + timedelta(days=1))
                     ])
-
-                    # Check if attendance exists
-                    has_attendance = any(
-                        we.work_entry_type_id.code == 'WORK100'
-                        for we in work_entries
-                    )
-
-                    if not has_attendance:
+                    
+                    if not attendances:
+                        # No attendance at all
                         absent_days += 1
-
+                    else:
+                        # Check if any attendance has WORK100 (or your specific work code)
+                        has_work100 = False
+                        for attendance in attendances:
+                            # Assuming you have a field for work code in hr.attendance
+                            # Adjust field name as per your actual field name (e.g., work_code, work_type, etc.)
+                            if hasattr(attendance, 'work_code') and attendance.work_code == 'WORK100':
+                                has_work100 = True
+                                break
+                            # Or check via related fields if work code is elsewhere
+                        
+                        if not has_work100:
+                            absent_days += 1
+                
                 current_date += timedelta(days=1)
-
+            
             slip.x_absent_days = absent_days
+
+    def _is_working_day(self, calendar, date):
+        """Check if a specific date is a working day based on the resource calendar"""
+        if not calendar:
+            return True  # If no calendar, assume all days are working days
+        
+        # Get working hours for the specific date
+        intervals = calendar._get_work_intervals(date, date + timedelta(days=1))
+        return len(intervals) > 0
