@@ -80,8 +80,6 @@ class HrPayslip(models.Model):
                     if attendance_date.weekday() in scheduled_weekdays:
                         attended_dates.add(attendance_date)
             
-            # Calculate working days after holidays
-            # (Scheduled days that are not holidays)
             working_days_after_holidays = scheduled_days_count - len(holiday_dates)
             
             # Absent days = (Working days after holidays) - (Days actually attended)
