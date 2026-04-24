@@ -1,6 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_absence_count,hr.absence.count,model_hr_absence_count,base.group_user,1,1,1,0
-access_hr_absence_report,hr.absence.report,model_hr_absence_report,base.group_user,1,1,1,1
-access_hr_absence_report_manager,hr.absence.report.manager,model_hr_absence_report,hr.group_hr_manager,1,1,1,1
-access_hr_payslip_absence_detail,hr.payslip.absence.detail,model_hr_payslip_absence_detail,base.group_user,1,1,1,1
-access_hr_payslip_absence_detail_manager,hr.payslip.absence.detail.manager,model_hr_payslip_absence_detail,hr.group_hr_manager,1,1,1,1
