@@ -1,36 +1,61 @@
 from odoo import models, fields, api
+from datetime import datetime, timedelta, date
+import calendar
 
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
 
-    x_holiday_regular = fields.Float(string="Regular Holidays", compute="_compute_holiday_counts", store=True)
-    x_holiday_special_nw = fields.Float(string="Special Non-Working", compute="_compute_holiday_counts", store=True)
-    x_holiday_special_w = fields.Float(string="Special Working", compute="_compute_holiday_counts", store=True)
-    x_holiday_local = fields.Float(string="Local Holidays", compute="_compute_holiday_counts", store=True)
+    # Removed x_regular_days as requested
+    x_regular_holiday = fields.Float(string="Regular Holiday Count", compute="_compute_holiday_counts", store=True)
+    x_specialw_holiday = fields.Float(string="Special Working Holiday", compute="_compute_holiday_counts", store=True)
+    x_specialn_holiday = fields.Float(string="Special Non-Working Holiday", compute="_compute_holiday_counts", store=True)
+    x_local_holiday = fields.Float(string="Local Holiday", compute="_compute_holiday_counts", store=True)
 
-    @api.depends('date_from', 'date_to', 'employee_id')
+    @api.depends('date_from', 'employee_id')
     def _compute_holiday_counts(self):
-        for slip in self: 
-            reg = snw = sw = loc = 0
-            
-            if slip.date_from and slip.date_to and slip.employee_id.resource_calendar_id: 
-                holidays = self.env['resource.calendar.leaves'].search([
-                    ('calendar_id', '=', slip.employee_id.resource_calendar_id.id),
-                    ('date_from', '<=', fields.Datetime.to_string(slip.date_to)),
-                    ('date_to', '>=', fields.Datetime.to_string(slip.date_from)),
-                ])
+        for rec in self:
+            # Reset counters
+            rec.x_regular_holiday = 0
+            rec.x_specialw_holiday = 0
+            rec.x_specialn_holiday = 0
+            rec.x_local_holiday = 0
 
-                for holiday in holidays: 
-                    if holiday.x_holiday_types == 'regular':
-                        reg += 1
-                    elif holiday.x_holiday_types == 'special_non_working':
-                        snw += 1
-                    elif holiday.x_holiday_types == 'special_working':
-                        sw += 1
-                    elif holiday.x_holiday_types == 'local':
-                        loc += 1
+            if not rec.date_from or not rec.employee_id:
+                continue
 
-            slip.x_holiday_regular = reg
-            slip.x_holiday_special_nw = snw
-            slip.x_holiday_special_w = sw
-            slip.x_holiday_local = loc
+            calendar_res = rec.employee_id.resource_calendar_id
+            if not calendar_res:
+                continue
+
+            # Define the month boundaries
+            year = rec.date_from.year
+            month = rec.date_from.month
+            _, last_day = calendar.monthrange(year, month)
+            month_start = date(year, month, 1)
+            month_end = date(year, month, last_day)
+
+            # Search for holidays linked to the employee's calendar within this month
+            holidays = self.env['resource.calendar.leaves'].search([
+                ('calendar_id', '=', calendar_res.id),
+                ('date_from', '<=', fields.Datetime.to_string(datetime.combine(month_end, datetime.max.time()))),
+                ('date_to', '>=', fields.Datetime.to_string(datetime.combine(month_start, datetime.min.time()))),
+            ])
+
+            for h in holidays:
+                # Calculate the duration within the current month bounds
+                h_start = max(h.date_from.date(), month_start)
+                h_end = min(h.date_to.date(), month_end)
+                duration = (h_end - h_start).days + 1
+                
+                if duration <= 0:
+                    continue
+
+                # Sort by the Selection field defined in your resource.calendar.leaves inherit
+                if h.x_holiday_types == 'regular':
+                    rec.x_regular_holiday += duration
+                elif h.x_holiday_types == 'special_non_working':
+                    rec.x_specialn_holiday += duration
+                elif h.x_holiday_types == 'special_working':
+                    rec.x_specialw_holiday += duration
+                elif h.x_holiday_types == 'local':
+                    rec.x_local_holiday += duration
