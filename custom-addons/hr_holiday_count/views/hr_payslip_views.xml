@@ -1,18 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo> 
-    <record id="view_hr_payslip_form_holiday_counts" model="ir.ui.view">
-        <field name="name">hr.payslip.form.holiday.counts</field>
-        <field name="model">hr.payslip</field>
-        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
-        <field name="arch" type="xml"> 
-            <xpath expr="//sheet//group" position="inside">
-                <group string="PH Holiday Summary">
-                    <field name="x_regular_holiday" readonly="1"/>
-                    <field name="x_specialn_holiday" readonly="1"/>
-                    <field name="x_specialw_holiday" readonly="1"/>
-                    <field name="x_local_holiday" readonly="1"/>
-                </group>
-            </xpath> 
-        </field>
-    </record> 
+<odoo>
+    <xpath expr="//group[@name='attendance_metrics']" position="inside">
+        <group string="PH Holiday Breakdown" name="holiday_breakdown">
+            <field name="x_holiday_regular"/>
+            <field name="x_holiday_special_nw"/>
+            <field name="x_holiday_special_w"/>
+            <field name="x_holiday_local"/>
+        </group>
+    </xpath>
 </odoo>
