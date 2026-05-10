@@ -1,5 +1,0 @@
-- [APSL-Nagarro](https://www.apsl.tech):
-  - Antoni Marroig \<<amarroig@apsl.net>\>
-  - Miquel Alzanillas \<<malzanillas@apsl.net>\>
-- [PyTech](https://www.pytech.it):
-  - Simone Rubino \<<simone.rubino@pytech.it>\>
