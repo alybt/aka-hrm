@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_philids_form" model="ir.ui.view">
+        <field name="name">res.company.phil.ids.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']/.." position="after">
+                <group string="Philippine Government IDs" name="group_phil_ids" col="2">
+
+                    <!-- The 'attrs' has been removed. 'maxlength' is used directly here, but note it is NOT a standard Odoo field attribute and may cause a parsing error. -->
+                    <field name="sss_employer_id"
+                           placeholder="03-9876543-2-000"
+                           input="number"
+                           maxlength="19"/>
+
+                    <field name="tin_id"
+                           placeholder="123-456-789-000"
+                           input="number"
+                           maxlength="15"/>
+
+                    <field name="philhealth_employer_id"
+                           placeholder="02-123456789-0"
+                           input="number"
+                           maxlength="14"/>
+
+                    <field name="pagibig_employer_id"
+                           placeholder="1212-3456-7890"
+                           input="number"
+                           maxlength="14"/>
+
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

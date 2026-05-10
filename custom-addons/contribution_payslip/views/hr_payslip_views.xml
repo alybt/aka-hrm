@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="hr_payslip_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.view.form.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet//group" position="inside">
+                <group string="Government Contributions" name="gov_contributions">
+
+                    <!-- Single Checkbox for Contribution Day -->
+                    <field name="x_is_contribution_day" string="Contribution Day"/>
+
+                    <!-- Show amounts only if checkbox is checked -->
+                    <group name="amounts_section" invisible="not x_is_contribution_day">
+
+                        <!-- SSS Amount - only if employee has SSS number -->
+                        <field name="x_sss_amount_display"
+                               string="SSS Amount"
+                               invisible="not contract_id.x_employee_sss_number"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+
+                        <!-- PhilHealth Amount - only if employee has PhilHealth number -->
+                        <field name="x_philhealth_amount_display"
+                               string="PhilHealth Amount"
+                               invisible="not contract_id.x_employee_philhealth_number"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+
+                        <!-- Pag-IBIG Amount - only if employee has Pag-IBIG number -->
+                        <field name="x_pagibig_amount_display"
+                               string="Pag-IBIG Amount"
+                               invisible="not contract_id.x_employee_pagibig_number"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+
+                    </group>
+
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Tree/List View -->
+    <record id="hr_payslip_view_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.view.tree.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="x_is_contribution_day" string="Contribution Day"/>
+            </field>
+        </field>
+    </record>
+</odoo>

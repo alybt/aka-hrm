@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_contract_view_form_ph_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.ph.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+                <page string="PH Gov Contributions" name="ph_contributions">
+                    <group>
+                        <group string="SSS" invisible="not x_employee_sss_number">
+                            <field name="x_employee_sss_number" readonly="1"/>
+                            <field name="x_sss_contribution"/>
+                        </group>
+
+                        <group string="PhilHealth" invisible="not x_employee_philhealth_number">
+                            <field name="x_employee_philhealth_number" readonly="1"/>
+                            <field name="x_philhealth_contribution"/>
+                        </group>
+
+
+                        <group string="Pag-IBIG" invisible="not x_employee_pagibig_number">
+                            <field name="x_employee_pagibig_number" readonly="1"/>
+                            <field name="x_pagibig_contribution"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
