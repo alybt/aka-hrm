@@ -23,6 +23,16 @@
                         <field name="x_actual_specialnw_holiday"/>
                         <field name="x_actual_specialw_holiday"/>
                     </group>
+                    <group>
+                            <field name="x_hrly_regular_holiday"/>
+                            <field name="x_hrly_specialnw_holiday"/>
+                            <field name="x_hrly_specialw_holiday"/>
+                    </group>
+                    <group>
+                            <field name="x_total_regular_holiday_pay"/>
+                            <field name="x_total_specialnw_holiday_pay"/>
+                            <field name="x_total_specialw_holiday_pay"/>
+                    </group>
                 </page>
             </xpath>
 
