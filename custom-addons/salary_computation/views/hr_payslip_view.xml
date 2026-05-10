@@ -9,45 +9,76 @@
 
             <xpath expr="//notebook" position="inside">
                 <page string="Salary Custom Computation" name="worked_hours_breakdown">
-                    <group>
-                        <field name="x_working_days" readonly="1"/>
-                        <field name="x_regular_days" readonly="1"/>
-                    </group>
-                    <group>
-                        <field name="x_salary_half" readonly="1"/>
-                        <field name="x_salary_daily" readonly="1"/>
-                    </group>
-                    <group>
-                        <field name="x_actual_regular_day"/>
-                        <field name="x_actual_regular_holiday"/>
-                        <field name="x_actual_specialnw_holiday"/>
-                        <field name="x_actual_specialw_holiday"/>
-                    </group>
-                    <group>
-                        <field name="x_worked_regular_hours"/>
-                        <field name="x_worked_regular_holiday_hours"/>
-                    </group>
-                    <group>
-                        <field name="x_worked_specialnw_holiday_hours"/>
-                        <field name="x_worked_specialw_holiday_hours"/>
-                    </group>
-                    <group>
+                    <group string="Salary Computation Details">
+                        
+                        <!-- Row 1: Two columns -->
+                        <group col="2">
+                            <group string="Working Days">
+                                <field name="x_working_days" readonly="1"/>
+                                <field name="x_regular_days" readonly="1"/>
+                            </group>
+                            <group string="Salary Rates">
+                                <field name="x_salary_half" readonly="1"/>
+                                <field name="x_salary_daily" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Row 2: Actual Days -->
+                        <group string="Actual Days" col="2">
+                            <group>
+                                <field name="x_actual_regular_day"/>
+                                <field name="x_actual_regular_holiday"/>
+                            </group>
+                            <group>
+                                <field name="x_actual_specialnw_holiday"/>
+                                <field name="x_actual_specialw_holiday"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Row 3: Worked Hours -->
+                        <group col="2">
+                            <group string="Regular Hours">
+                                <field name="x_worked_regular_hours"/>
+                                <field name="x_worked_regular_holiday_hours"/>
+                            </group>
+                            <group string="Special Holiday Hours">
+                                <field name="x_worked_specialnw_holiday_hours"/>
+                                <field name="x_worked_specialw_holiday_hours"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Row 4: Hourly Rates -->
+                        <group string="Hourly Rates" col="2">
+                            <group>
                             <field name="x_hrly_regular_holiday"/>
                             <field name="x_hrly_specialnw_holiday"/>
-                            <field name="x_hrly_specialw_holiday"/>
-                    </group>
-                    <group>
-                            <field name="x_total_regular_holiday_pay"/>
-                            <field name="x_total_specialnw_holiday_pay"/>
-                            <field name="x_total_specialw_holiday_pay"/>
-                    </group>
-                    <group>
-                        <label for="x_undertime_hrs" string="Undertime Penalty"/>
-                        <div class="o_row">
-                            <field name="x_undertime_hrs" class="oe_inline"/>
-                            <span> Hours = </span>
-                            <field name="x_undertime_amount" class="oe_inline" widget="monetary"/>
-                        </div>
+                            </group>
+                            <group>
+                                <field name="x_hrly_specialw_holiday"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Row 5: Total Holiday Pay -->
+                        <group string="Total Holiday Pay" col="2">
+                            <group>
+                                <field name="x_total_regular_holiday_pay"/>
+                                <field name="x_total_specialnw_holiday_pay"/>
+                            </group>
+                            <group>
+                                <field name="x_total_specialw_holiday_pay"/>
+                            </group>
+                        </group>
+                        
+                        <!-- Row 6: Undertime -->
+                        <group col="2">
+                            <group string="Undertime Hours">
+                                <field name="x_undertime_hrs"/>
+                            </group>
+                            <group string="Undertime Amount">
+                                <field name="x_undertime_amount" widget="monetary"/>
+                            </group>
+                        </group>
+                        
                     </group>
                 </page>
             </xpath>
