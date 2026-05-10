@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_ph_employee_ids_tree" model="ir.ui.view">
+        <field name="name">ph.employee.ids.tree</field>
+        <field name="model">ph.employee.ids</field>
+        <field name="arch" type="xml">
+            <tree string="Employee Government IDs">
+                <field name="employee_id"/>
+                <field name="sss_number"/>
+                <field name="philhealth_number"/>
+                <field name="pagibig_number"/>
+                <field name="tin_number"/>
+                <field name="is_active" widget="boolean" string="Active Contribution"/>
+                <field name="activation_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_ph_employee_ids_form" model="ir.ui.view">
+        <field name="name">ph.employee.ids.form</field>
+        <field name="model">ph.employee.ids</field>
+        <field name="arch" type="xml">
+            <form string="Employee Government IDs">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_activate" type="object"
+                                class="oe_stat_button" icon="fa-check-circle"
+                                invisible="is_active == True">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Activate for Contributions</span>
+                            </div>
+                        </button>
+                        <button name="action_deactivate" type="object"
+                                class="oe_stat_button" icon="fa-times-circle"
+                                invisible="is_active == False">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Deactivate</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <group name="main" col="2">
+                        <field name="employee_id" options="{'no_create': True}"/>
+                        <field name="is_active" string="Active for Government Contributions"/>
+                        <field name="active_status" widget="badge"/>
+                        <field name="activation_date"/>
+                        <field name="deactivation_date" invisible="is_active == True"/>
+                    </group>
+
+                    <group string="Philippine Government IDs" col="2">
+                        <field name="sss_number" placeholder="34-1234567-8"/>
+                        <field name="philhealth_number" placeholder="12-012345678-9"/>
+                        <field name="pagibig_number" placeholder="1212-3456-7890"/>
+                        <field name="tin_number" placeholder="123-456-789-000"/>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_ph_employee_ids_search" model="ir.ui.view">
+        <field name="name">ph.employee.ids.search</field>
+        <field name="model">ph.employee.ids</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="sss_number"/>
+                <field name="philhealth_number"/>
+                <field name="pagibig_number"/>
+                <field name="tin_number"/>
+                <separator/>
+                <filter name="active_contributions" string="Active Contributions" domain="[('is_active','=',True)]"/>
+                <filter name="inactive_contributions" string="Inactive/History" domain="[('is_active','=',False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                    <filter name="group_by_active" string="Contribution Status" context="{'group_by':'is_active'}"/>
+                    <filter name="group_by_activation" string="Activation Date" context="{'group_by':'activation_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_ph_employee_ids" model="ir.actions.act_window">
+        <field name="name">Philippine Government IDs</field>
+        <field name="res_model">ph.employee.ids</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_ph_employee_ids_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add Philippine government IDs for employees.
+            </p>
+            <p>
+                <b>Active Contribution</b> checkbox indicates which IDs are currently used for government contributions.
+                Only one active ID record per employee is allowed.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_ph_employee_ids"
+                name="Philippine Government IDs"
+                parent="hr.menu_hr_root"
+                action="action_ph_employee_ids"
+                sequence="10"/>
+</odoo>
