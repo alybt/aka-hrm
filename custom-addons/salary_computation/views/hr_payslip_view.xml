@@ -17,6 +17,12 @@
                         <field name="x_working_days" readonly="1"/>
                         <field name="x_regular_days" readonly="1"/>
                     </group>
+                    <group>
+                        <field name="x_actual_regular_day"/>
+                        <field name="x_actual_regular_holiday"/>
+                        <field name="x_actual_specialnw_holiday"/>
+                        <field name="x_actual_specialw_holiday"/>
+                    </group>
                 </page>
             </xpath>
 
