@@ -33,6 +33,14 @@
                             <field name="x_total_specialnw_holiday_pay"/>
                             <field name="x_total_specialw_holiday_pay"/>
                     </group>
+                    <group>
+                        <label for="x_undertime_hrs" string="Undertime Penalty"/>
+                        <div class="o_row">
+                            <field name="x_undertime_hrs" class="oe_inline"/>
+                            <span> Hours = </span>
+                            <field name="x_undertime_amount" class="oe_inline" widget="monetary"/>
+                        </div>
+                    </group>
                 </page>
             </xpath>
 

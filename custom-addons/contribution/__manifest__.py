@@ -3,10 +3,10 @@
     'version': '1.0',
     'category': 'Human Resources',
     'summary': 'Has Company and, Employe Details for Contribution ID and you can manually setup the Contribution for each Employee ',
-    'depends': ['payroll', 'hr_contract', 'hr'],
+    'depends': ['hr','hr_contract','payroll', ],
     'data': [
         'security/ir.model.access.csv',
-        'views/employee_contribtion_ID.xml',
+        'views/employee_contribution_ID.xml',
         'views/employee_ID.xml',
         'views/company_ID.xml',
         'views/contribution_manual.xml',
@@ -14,6 +14,6 @@
     ],
     "installable": True,
     "application": True,
-    "auto_install": True,
+    "auto_install": False,
     'license': 'LGPL-3',
 }

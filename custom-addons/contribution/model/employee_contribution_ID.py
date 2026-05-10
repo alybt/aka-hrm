@@ -8,7 +8,6 @@ class PHEmployeeIDs(models.Model):
     _rec_name = 'employee_id'
     _order = 'employee_id, is_active DESC'
 
-    # Relationship
     employee_id = fields.Many2one(
         'hr.employee',
         string="Employee",
