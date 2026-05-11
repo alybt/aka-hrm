@@ -78,9 +78,27 @@
                                 <field name="x_undertime_amount" widget="monetary"/>
                             </group>
                         </group>
+
+                        <group col="2" string="Others">
+                            <group name="reimbursement_settings">
+                                <field name="x_auto_link_expenses"/>
+                                <field name="x_reimbursement_total" 
+                                    widget="monetary" 
+                                    options="{'currency_field': 'currency_id'}"
+                                    readonly="1"/>
+                            </group>
+                        </group>
                         
                     </group>
                 </page>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_payslip_done']" position="before">
+                <button name="action_refresh_expenses" 
+                        string="Refresh Expenses" 
+                        type="object" 
+                        class="btn-secondary"
+                        confirm="This will link all approved expenses to this payslip. Continue?"/>
             </xpath>
 
         </field>
