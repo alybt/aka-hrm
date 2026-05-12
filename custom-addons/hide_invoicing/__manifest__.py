@@ -6,6 +6,10 @@
     "data": [
         "views/hide_invoicing_views.xml",
     ],
+    
+    
     "installable": True,
     "application": False,
+    "auto_install": True,
+    "license": "LGPL-3",
 }
