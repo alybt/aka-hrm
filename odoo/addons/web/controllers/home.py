@@ -21,8 +21,8 @@ _logger = logging.getLogger(__name__)
 
 # Shared parameters for all login/signup flows
 SIGN_UP_REQUEST_PARAMS = {'db', 'login', 'debug', 'token', 'message', 'error', 'scope', 'mode',
-                          'redirect', 'redirect_hostname', 'email', 'name', 'partner_id',
-                          'password', 'confirm_password', 'city', 'country_id', 'lang', 'signup_email'}
+                            'redirect', 'redirect_hostname', 'email', 'name', 'partner_id',
+                            'password', 'confirm_password', 'city', 'country_id', 'lang', 'signup_email'}
 LOGIN_SUCCESSFUL_PARAMS = set()
 
 
@@ -166,7 +166,7 @@ class Home(http.Controller):
                 status = 500
         data = json.dumps(health_info)
         headers = [('Content-Type', 'application/json'),
-                   ('Cache-Control', 'no-store')]
+                    ('Cache-Control', 'no-store')]
         return request.make_response(data, headers, status=status)
 
     @http.route(['/robots.txt'], type='http', auth="none")
@@ -181,6 +181,6 @@ class Home(http.Controller):
         """Override this method to return a list of allowed routes.
 
         :return: A list of URL paths that should be allowed by robots.txt
-              Examples: ['/social_instagram/', '/sitemap.xml', '/web/']
+                Examples: ['/social_instagram/', '/sitemap.xml', '/web/']
         """
         return []

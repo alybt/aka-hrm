@@ -61,11 +61,6 @@
                         <field name="note" placeholder="Add note..." />
                     </div>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers" />
-                    <field name="activity_ids" widget="mail_activity" />
-                    <field name="message_ids" widget="mail_thread" />
-                </div>
             </form>
         </field>
     </record>
@@ -141,7 +136,6 @@
                 <field name="id" />
                 <field name="employee_id" />
                 <field name="date" />
-                <field name="activity_ids" />
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click o_hr_kanban_record">
@@ -161,10 +155,6 @@
                                         <span>
                                             <t t-out="record.date.value" />
                                         </span>
-                                        <field
-                                            name="activity_ids"
-                                            widget="kanban_activity"
-                                        />
                                     </div>
                                     <div class="oe_kanban_bottom_right">
                                         <field
