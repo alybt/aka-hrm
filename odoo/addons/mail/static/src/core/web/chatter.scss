@@ -1,11 +1,14 @@
+/* Hide notification messages in chatter */
 .o-mail-Chatter .o-mail-Message-body [summary~="o_mail_notification"] {
     display: none;
 }
 
+/* Hide message actions when chatter is disabled */
 .o-chatter-disabled .o-mail-Message-actions {
     display: none;
 }
 
+/* Custom chatter top styling */
 .o-mail-Chatter-top {
     z-index: $o-mail-NavigableList-zIndex - 2;
     background-color: $o-webclient-background-color;
@@ -15,38 +18,44 @@
     }
 }
 
+/* Hover effect for recipient list button */
 .o-mail-Chatter-recipientListButton:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+/* Focus effect for followers button */
 .o-mail-Followers-button:focus {
     background-color: $gray-200;
 }
 
+/* Followers dropdown max width/height */
 .o-mail-Followers-dropdown {
     /**
      * Note: Min() refers to CSS min() and not SCSS min().
-     *
      * To by-pass SCSS min() shadowing CSS min(), we rely on SCSS being case-sensitive while CSS isn't.
      */
     max-width: Min(400px, 95vw);
     max-height: Min(500px, 50vh);
 }
 
+/* Follower avatar size */
 .o-mail-Follower-avatar {
     width: $o-mail-Avatar-sizeSmall;
     height: $o-mail-Avatar-sizeSmall;
 }
 
+/* Hover effects for follower details and actions */
 .o-mail-Follower-details:hover,
 .o-mail-Follower-action:hover {
     background-color: var(--chatter_follower-bg--hover, #{$o-gray-300});
 }
 
+/* Follow button hover */
 .btn.o-mail-Chatter-follow:hover {
     color: $black !important;
 }
 
+/* Active state for chatter buttons */
 .o-mail-Chatter button.o-active {
     color: $o-action !important;
 }
