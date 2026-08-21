@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_salary_computat" model="ir.ui.view">
+        <field name="name">hr.payslip.salary.half</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Salary Custom Computation" name="worked_hours_breakdown">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+                        <h2 style="margin: 0; color: #495057;">Salary Computation Details</h2>
+                        <div style="font-size: 1.4em; font-weight: bold; transform: translateY(-3px); display: flex; align-items: center; color: #017e84;">
+                            <span style="margin-right: 10px;">Net Pay:</span>
+                            <field name="x_netpay_stored" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1" nolabel="1" class="text-primary"/>
+                        </div>
+                    </div>
+                    <group>
+
+                        <!-- Row 1: Two columns -->
+                        <group col="2">
+                            <group string="Working Days">
+                                <field name="x_working_days" readonly="1"/>
+                                <field name="x_regular_days" readonly="1"/>
+                            </group>
+                            <group string="Salary Rates">
+                                <field name="x_salary_half" readonly="1"/>
+                                <field name="x_salary_daily" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <!-- Row 2: Actual Days -->
+                        <group string="Actual Days" col="2">
+                            <group>
+                                <field name="x_actual_regular_day"/>
+                                <field name="x_actual_regular_holiday"/>
+                            </group>
+                            <group>
+                                <field name="x_actual_specialnw_holiday"/>
+                                <field name="x_actual_specialw_holiday"/>
+                            </group>
+                        </group>
+
+                        <!-- Row 3: Worked Hours -->
+                        <group col="2">
+                            <group string="Regular Hours">
+                                <field name="x_worked_regular_hours"/>
+                                <field name="x_worked_regular_holiday_hours"/>
+                            </group>
+                            <group string="Special Holiday Hours">
+                                <field name="x_worked_specialnw_holiday_hours"/>
+                                <field name="x_worked_specialw_holiday_hours"/>
+                            </group>
+                        </group>
+
+                        <!-- Row 4: Hourly Rates -->
+                        <group string="Hourly Rates" col="2">
+                            <group>
+                            <field name="x_hrly_regular_holiday"/>
+                            <field name="x_hrly_specialnw_holiday"/>
+                            </group>
+                            <group>
+                                <field name="x_hrly_specialw_holiday"/>
+                            </group>
+                        </group>
+
+                        <!-- Row 5: Total Holiday Pay -->
+                        <group string="Total Holiday Pay" col="2">
+                            <group>
+                                <field name="x_total_regular_holiday_pay"/>
+                                <field name="x_total_specialnw_holiday_pay"/>
+                            </group>
+                            <group>
+                                <field name="x_total_specialw_holiday_pay"/>
+                            </group>
+                        </group>
+
+                        <!-- Row 6: Undertime -->
+                        <group col="2">
+                            <group string="Undertime Hours">
+                                <field name="x_undertime_hrs"/>
+                            </group>
+                            <group string="Undertime Amount">
+                                <field name="x_undertime_amount" widget="monetary"/>
+                            </group>
+                        </group>
+
+                        <group col="2" string="Net Pay Validation">
+                            <group name="net_pay_validation_settings">
+                                <field name="x_gross_total_stored"
+                                    widget="monetary"
+                                    options="{'currency_field': 'currency_id'}"
+                                    readonly="1"/>
+                                <field name="x_deduction_total_stored"
+                                    widget="monetary"
+                                    options="{'currency_field': 'currency_id'}"
+                                    readonly="1"/>
+                            </group>
+                        </group>
+
+                        <group col="2" string="Others">
+                            <group name="reimbursement_settings">
+                                <field name="x_auto_link_expenses"/>
+                                <field name="x_reimbursement_total"
+                                    widget="monetary"
+                                    options="{'currency_field': 'currency_id'}"
+                                    readonly="1"/>
+                            </group>
+                        </group>
+
+
+
+                    </group>
+                </page>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_payslip_done']" position="before">
+                <button name="action_refresh_expenses"
+                        string="Refresh Expenses"
+                        type="object"
+                        class="btn-secondary"
+                        confirm="This will link all approved expenses to this payslip. Continue?"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

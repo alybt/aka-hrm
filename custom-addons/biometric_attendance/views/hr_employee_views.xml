@@ -1,0 +1,87 @@
+odoo.tools.convert.ParseError: while parsing file:/c:/aka-hrm/custom-addons/biometric_attendance/views/hr_employee_views.xml:4
+Error while validating view near:
+
+<form string="Employee" js_class="hr_employee_form">
+                    <field name="active" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+
+Field 'has_biometric' used in modifier 'invisible' (has_biometric) must be present in view but is missing.
+
+View error context:
+{'file': 'c:\\aka-hrm\\custom-addons\\biometric_attendance\\views\\hr_employee_views.xml',
+ 'line': 1,
+ 'name': 'hr.employee.form.inherit.biometric',
+ 'view': ir.ui.view(1360,),
+ 'view.model': 'hr.employee',
+ 'view.parent': ir.ui.view(525,),
+ 'xmlid': 'view_hr_employee_form_inherit_biometric'}
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Employee Form View -->
+    <record id="view_hr_employee_form_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add the has_biometric field to the view (hidden) so it can be used in modifiers -->
+            <xpath expr="//div[@name='button_box']" position="before">
+                <field name="has_biometric" invisible="1"/>
+                <field name="biometric_enrolled" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_register_biometric" type="object"
+                        class="oe_stat_button" icon="fa-fingerprint"
+                        help="Register for Biometric Device"
+                        invisible="has_biometric == True">
+                    <div class="o_stat_info">
+                        <field name="biometric_enrolled" widget="boolean" options="{'format': 'badge'}" nolabel="1"/>
+                        <span class="o_stat_text">Add Biometric</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Biometric Devices" name="biometric_devices_page">
+                    <group string="Biometric Registrations">
+                        <field name="biometric_registrations">
+                            <tree>
+                                <field name="device_id"/>
+                                <field name="user_id_in_device"/>
+                                <field name="status" widget="badge"/>
+                                <field name="registration_date"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Employee Tree View -->
+    <record id="view_hr_employee_tree_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="has_biometric" widget="boolean" string="Biometric"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Inherit Employee Kanban View -->
+    <record id="view_hr_employee_kanban_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.kanban.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_kanban_details']" position="inside">
+                <div class="text-muted" invisible="has_biometric == False">
+                    <span class="fa fa-fingerprint" groups="base.group_user"/>
+                    <span>Biometric Enabled</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,177 @@
+ What This Model Does
+Instead of adding fields directly to the Employee form (which would clutter it), this creates a separate but connected table in your database that stores Philippine government IDs for employees.
+
+📊 How It Works Visually
+text
+┌─────────────────────┐         ┌──────────────────────────┐
+│   HR Employee       │         │   Philippine IDs Table   │
+│   (hr.employee)     │         │   (ph.employee.ids)      │
+├─────────────────────┤         ├──────────────────────────┤
+│ John Smith          │◄────────│ employee_id: John Smith  │
+│ Department: IT      │  1 to N  │ sss_number: 34-1234567-8 │
+│ Position: Manager   │         │ philhealth:12-012345678-9│
+│                     │         │ pagibig: 1212-3456-7890  │
+└─────────────────────┘         └──────────────────────────┘
+                                        │
+                                        │ Also can have:
+                                        ▼
+                                ┌──────────────────────────┐
+                                │ Historical Record (2023)  │
+                                │ Old SSS: 34-1234567-8     │
+                                │ Active: False             │
+                                └──────────────────────────┘
+🔄 How Users Interact With It
+Step 1: After Installing the Module
+Go to Employees app
+
+Open any employee record (e.g., "John Smith")
+
+You'll see a new tab called "Philippine IDs"
+
+![Tab Visual]
+
+text
+┌─────────────────────────────────────────────────────────┐
+│ [Personal Info] [HR Settings] [Philippine IDs] [Other]  │
+└─────────────────────────────────────────────────────────┘
+Step 2: Adding IDs
+Click the "Philippine IDs" tab and you'll see:
+
+text
+┌────────────────────────────────────────────────────────────┐
+│ Philippine IDs                                             │
+├────────────────────────────────────────────────────────────┤
+│ Create a new record:                                       │
+│                                                            │
+│ SSS Number:      [34-1234567-8    ]  (auto-formats)       │
+│ PhilHealth:       [12-012345678-9  ]  (auto-formats)       │
+│ Pag-IBIG:         [1212-3456-7890 ]  (auto-formats)       │
+│ TIN:              [123-456-789-000]  (auto-formats)       │
+│ Active:           [✓]                                      │
+│                                                            │
+│ [Save] [Discard]                                           │
+└────────────────────────────────────────────────────────────┘
+Step 3: What Happens When User Types
+User types: 3412345678
+System shows: 34-1234567-8 (hyphens added automatically!)
+
+User types wrong format: 12345
+System when saving: ❌ Error message: "SSS Number must contain exactly 10 digits"
+
+💡 Real-World Usage Examples
+Example 1: New Employee
+text
+1. HR opens employee record for "Maria Santos"
+2. Goes to "Philippine IDs" tab
+3. Adds her IDs:
+   - SSS: 34-9876543-2
+   - PhilHealth: 02-123456789-0
+   - Pag-IBIG: 1212-9999-8888
+   - TIN: 123-456-789-012
+4. Clicks Save
+5. All IDs are validated and stored
+Example 2: Employee Updates ID
+text
+1. Employee gets new Pag-IBIG number
+2. HR goes to existing record
+3. Instead of deleting old one, creates new record:
+   - New Pag-IBIG: 1212-7777-6666
+   - Sets old record's "Active" to FALSE
+4. Both records saved (history preserved!)
+Example 3: Payroll Integration
+python
+# Payroll can access IDs like this:
+employee = self.env['hr.employee'].browse(employee_id)
+sss = employee.ph_government_ids.filtered(lambda x: x.is_active)[0].sss_number
+# Returns: "34-1234567-8"
+🗄️ How Data is Stored in Database
+When you save, this is what happens:
+
+sql
+-- Main Employee Table (already exists)
+hr_employee table:
+| id | name        | department |
+|----|-------------|------------|
+| 5  | John Smith  | IT         |
+
+-- New Philippine IDs Table (created by module)
+ph_employee_ids table:
+| id | employee_id | sss_number     | philhealth_number | is_active |
+|----|-------------|----------------|-------------------|-----------|
+| 1  | 5           | 34-1234567-8   | 12-012345678-9    | True      |
+| 2  | 5           | 34-9876543-1   | 12-987654321-0    | False     |
+🔧 What Happens Behind the Scenes
+When you type numbers:
+javascript
+User types: "3412345678"
+↓
+JavaScript removes non-digits: "3412345678"
+↓
+Applies mask: "99-9999999-9"
+↓
+Shows: "34-1234567-8"
+When you save:
+python
+1. Take what user typed: "34-1234567-8"
+2. Remove hyphens to check: "3412345678"
+3. Count digits: 10 digits ✓ OK
+4. Check format matches pattern: ✓ OK
+5. Save to database
+If format is wrong:
+python
+User saves: "34-123-4567-8"
+↓
+System: "SSS Number must follow format: XX-XXXXXXX-X"
+↓
+Save prevented, error message shown to user
+📱 Employee View Integration
+The IDs appear in the Employee form in several ways:
+
+Option A: As a list (One2many)
+text
+┌─────────────────────────────────────────────┐
+│ John Smith - Employee Form                  │
+├─────────────────────────────────────────────┤
+│ [Personal Info] [Philippine IDs]            │
+│                                             │
+│   ┌─────────────────────────────────────┐   │
+│   │ SSS Number        │ Active │ Notes  │   │
+│   ├─────────────────────────────────────┤   │
+│   │ 34-1234567-8      │ ✓      │ Current│   │
+│   │ 34-9876543-1      │ ✗      │ Old    │   │
+│   └─────────────────────────────────────┘   │
+│                                             │
+│   [+ Add a line]                            │
+└─────────────────────────────────────────────┘
+Option B: Direct fields on form (Related fields)
+Because we added the related fields in hr_employee.py, you can also display them directly:
+
+xml
+<field name="sss_number"/>  <!-- Shows current active SSS -->
+🚀 Benefits of This Approach
+History tracking - Keep old IDs when employees change numbers
+
+Multiple ID types - Different validity periods, notes per ID
+
+Clean employee form - Doesn't clutter with many fields
+
+Reusable model - Can be extended for dependents, beneficiaries
+
+Security - Control who can view/edit each ID separately
+
+Reporting - Easy to generate reports of employees missing certain IDs
+
+❓ Common Questions
+Q: Can an employee have multiple active IDs?
+A: Yes, but typically only one active set per employee. The "Active" checkbox helps track current vs. old.
+
+Q: What if an employee marries and changes SSS?
+A: Deactivate old record (Active=false), create new record with new number.
+
+Q: Can I import these from Excel?
+A: Yes! Odoo's import feature works with this model.
+
+Q: Can payroll use these numbers?
+A: Yes, easily accessed via employee.ph_government_ids.filtered('is_active')
+
+Does this help explain how it works? Would you like me to show you how to access these IDs in other parts of Odoo (like payslips or reports)?

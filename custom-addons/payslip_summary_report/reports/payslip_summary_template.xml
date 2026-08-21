@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="payslip_summary_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o" t-set="index" t-value="index + 1">
+                <div class="page">
+                    <style>
+                        .payslip-summary-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 10px;
+                        }
+                        .payslip-summary-table th, .payslip-summary-table td {
+                            border: 1px solid #ddd;
+                            padding: 6px;
+                            text-align: left;
+                            vertical-align: top;
+                        }
+                        .payslip-summary-table th {
+                            background-color: #f2f2f2;
+                            font-weight: bold;
+                            text-align: center;
+                        }
+                        .text-right {
+                            text-align: right;
+                        }
+                        .text-center {
+                            text-align: center;
+                        }
+                        .header-info {
+                            margin-bottom: 20px;
+                        }
+                        .company-address {
+                            font-size: 11px;
+                            white-space: pre-line;
+                        }
+                    </style>
+
+                    <!-- Company header (first page only, but repeats per payslip if you want) -->
+                    <div class="header-info">
+                        <div class="company-name">
+                            <strong><span t-field="o.company_id.name"/></strong>
+                        </div>
+                        <div class="company-address">
+                            <span t-field="o.company_id.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                        </div>
+                        <div>
+                            Work Days: <span t-field="o.x_working_days"/> |
+                            Regular Days: <span t-field="o.x_regular_days"/> |
+                            Hour/Month: <span t-esc="o.x_regular_days * 8"/> |
+                            Regular Hours: <span t-esc="o.x_working_days * 8"/> |
+                            Util Days/Month: <span t-field="o.x_overall_working_days"/> |
+                            Util Reg. Days: <span t-field="o.x_regular_days"/>
+                        </div>
+                    </div>
+
+                    <!-- Table header -->
+                    <table class="payslip-summary-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Employee Name</th>
+                                <th>Monthly Rate</th>
+                                <th>Half Month</th>
+                                <th>Daily Rate</th>
+                                <th>Total Hours</th>
+                                <th>Hourly Rate</th>
+                                <th>Add</th>
+                                <th>Gross</th>
+                                <th>Undertime Hours</th>
+                                <th>Undertime Amount</th>
+                                <th>Cash Advance</th>
+                                <th>Pag-IBIG</th>
+                                <th>PhilHealth</th>
+                                <th>SSS</th>
+                                <th>Total Deduction</th>
+                                <th>Net Pay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="line_index" t-value="0"/>
+                            <t t-foreach="docs" t-as="payslip">
+                                <t t-set="line_index" t-value="line_index + 1"/>
+                                <tr>
+                                    <td class="text-center"><t t-esc="line_index"/></td>
+                                    <td><span t-field="payslip.employee_id.name"/></td>
+                                    <td class="text-right"><span t-esc="payslip.contract_id.wage" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-esc="payslip.x_salary_half" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-esc="payslip.x_salary_daily" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-field="payslip.x_total_hours"/></td>
+                                    <td class="text-right">
+                                        <t t-set="hourly_rate" t-value="(payslip.x_salary_daily or 0.0) / 8"/>
+                                        <span t-esc="hourly_rate" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/>
+                                    </td>
+                                    <td class="text-right">
+                                        <!-- Add = Other earnings (Reimbursements + Bonuses) – adjust as needed -->
+                                        <t t-set="others" t-value="payslip.x_gross_total_stored - (payslip.contract_id.wage or 0.0)"/>
+                                        <span t-esc="others" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/>
+                                    </td>
+                                    <td class="text-right"><span t-field="payslip.x_gross_total_stored" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-field="payslip.x_undertime_hrs"/></td>
+                                    <td class="text-right"><span t-field="payslip.x_undertime_amount" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-field="payslip.x_cash_advance" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-field="payslip.x_pagibig_amount_display" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-field="payslip.x_philhealth_amount_display" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-field="payslip.x_sss_amount_display" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right"><span t-field="payslip.x_deduction_total_stored" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/></td>
+                                    <td class="text-right">
+                                        <t t-set="net" t-value="(payslip.x_gross_total_stored or 0.0) - (payslip.x_deduction_total_stored or 0.0)"/>
+                                        <span t-esc="net" t-options='{"widget": "monetary", "display_currency": payslip.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <!-- Optional footer totals -->
+                        <tfoot>
+                            <tr style="background-color: #e9ecef; font-weight: bold;">
+                                <td colspan="8" class="text-right">Total</td>
+                                <td class="text-right">
+                                    <t t-set="total_gross" t-value="sum([p.x_gross_total_stored or 0.0 for p in docs])"/>
+                                    <t t-esc="total_gross" t-options='{"widget": "monetary", "display_currency": docs[0].company_id.currency_id if docs else None}'/>
+                                </td>
+                                <td colspan="2"></td>
+                                <td class="text-right">
+                                    <t t-set="total_ca" t-value="sum([p.x_cash_advance or 0.0 for p in docs])"/>
+                                    <t t-esc="total_ca" t-options='{"widget": "monetary", "display_currency": docs[0].company_id.currency_id if docs else None}'/>
+                                </td>
+                                <td colspan="3"></td>
+                                <td class="text-right">
+                                    <t t-set="total_ded" t-value="sum([p.x_deduction_total_stored or 0.0 for p in docs])"/>
+                                    <t t-esc="total_ded" t-options='{"widget": "monetary", "display_currency": docs[0].company_id.currency_id if docs else None}'/>
+                                </td>
+                                <td class="text-right">
+                                    <t t-set="total_net" t-value="total_gross - total_ded"/>
+                                    <t t-esc="total_net" t-options='{"widget": "monetary", "display_currency": docs[0].company_id.currency_id if docs else None}'/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Signature lines -->
+                    <div style="margin-top: 40px;">
+                        <table style="width: 100%; border: none;">
+                            <tr>
+                                <td style="width: 50%; border: none;">Prepared by: ____________________</td>
+                                <td style="width: 50%; border: none;">Employee Position: ____________________</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none;">Prepared by: ____________________</td>
+                                <td style="border: none;">Employee Position: ____________________</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

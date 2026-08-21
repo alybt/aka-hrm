@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_run_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.inherit</field>
+        <field name="model">hr.payslip.run</field>
+            <field name="inherit_id" ref="payroll.hr_payslip_run_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(action_payslip_batch_summary_wizard)d"
+                        string="Batch Summary Report"
+                        type="action"
+                        class="btn-primary"
+                        context="{'default_batch_id': active_id}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

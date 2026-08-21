@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_batch_payslip" model="ir.actions.report">
+        <field name="name">Batch Payslip (Custom)</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">payslip_report.report_payslip_individual_custom</field>
+        <field name="report_file">payslip_report.report_payslip_individual_custom</field>
+    </record>
+</odoo>

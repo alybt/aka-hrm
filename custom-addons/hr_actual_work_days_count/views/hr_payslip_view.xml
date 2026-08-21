@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_actual_days" model="ir.ui.view">
+        <field name="name">hr.payslip.form.actual.days.breakdown</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Actual Days Breakdown" name="actual_days_breakdown">
+                    <group>
+                            <field name="x_actual_regular_day"/>
+                            <field name="x_actual_regular_holiday"/>
+                            <field name="x_actual_specialnw_holiday"/>
+                            <field name="x_actual_specialw_holiday"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

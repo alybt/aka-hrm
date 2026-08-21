@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_payslip_individual_custom" inherit_id="payroll.report_payslip">
+        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <style type="text/css">
+                            /* Hide the default company header and address block */
+                            .o_report_layout_standard > .header, .o_report_layout_stdheader {
+                                display: none !important;
+                            }
+                            /* Remove extra padding/margin from the layout */
+                            .o_report_layout_standard {
+                                padding-top: 0 !important;
+                            }
+                            .page {
+                                padding: 0 !important;   /* Remove any page padding from basic_layout */
+                                margin: 0 !important;
+                            }
+                            .payslip-container {
+                                width: 100%;
+                                background-color: #ffffff;
+                                box-sizing: border-box;
+                                padding: 10px 0 25px 0;
+                                margin-bottom: 20px;
+                                border-bottom: 2px dashed #bbbbbb;
+                                page-break-inside: avoid;
+                                break-inside: avoid;
+                            }
+                            .payslip-container:last-child {
+                                border-bottom: none;
+                                margin-bottom: 0;
+                                padding-bottom: 0;
+                            }
+                                .document-id {
+                                    font-size: 14px;
+                                    color: #777777;
+                                    margin-bottom: 10px;
+                                }
+                                .header-table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                    margin-bottom: 15px;
+                                    border: 0px solid transparent;
+
+                                }
+                                .info-block {
+                                    background-color: #e0e0e0;
+                                    padding: 15px;
+                                    font-size: 14px;
+                                    line-height: 1.5;
+                                    vertical-align: top;
+                                }
+                                .logo-block {
+                                    background-color: #e0e0e0;
+                                    width: 35%;
+                                    padding: 15px;
+                                    vertical-align: top;
+                                }
+                                .company-details {
+                                    font-size: 11px;
+                                    line-height: 1.3;
+                                }
+                                .company-name {
+                                    font-weight: bold;
+                                    font-size: 15px;
+                                    margin-bottom: 2px;
+                                }
+                                .meta-table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                    font-size: 13px;
+                                    margin-bottom: 20px;
+                                    border: 0px solid transparent;
+                                }
+                                .meta-table td {
+                                    padding: 4px 5px;
+                                    vertical-align: middle;
+                                    border: 0px solid transparent;
+                                }
+                                .text-right { text-align: right; }
+                                .text-center { text-align: center; }
+                                .section-header {
+                                    background-color: #dcdcdc;
+                                    font-weight: bold;
+                                    font-size: 16px;
+                                    padding: 8px 12px;
+                                    margin-top: 15px;
+                                    overflow: auto;          /* Clears floats */
+                                    width: 100%;             /* Full width relative to parent */
+                                    box-sizing: border-box;  /* Includes padding in width */
+                                }
+                                .section-title { float: left; }
+                                .section-total { float: right; }
+                                .breakdown-table {
+                                    width: 100%;
+                                    border-collapse: separate;
+                                    border-spacing: 5px;
+                                    font-size: 13px;
+                                    margin-top: 5px;
+                                    margin-bottom: 15px;
+                                }
+                                .breakdown-table th {
+                                    font-weight: bold;
+                                    text-align: center;
+                                    padding: 4px;
+                                }
+                                .breakdown-table td {
+                                    background-color: #e6e6e6;
+                                    padding: 6px 10px;
+                                    vertical-align: top;
+                                }
+                                .row-title {
+                                    font-weight: bold;
+                                    margin-bottom: 4px;
+                                }
+                                .indented-item {
+                                    margin-bottom: 4px;
+                                    padding-left: 10px;
+                                }
+                                .net-pay-section {
+                                    background-color: #dcdcdc;
+                                    font-weight: bold;
+                                    font-size: 16px;
+                                    padding: 10px 12px;
+                                    margin-top: 10px;
+                                    clear: both;
+                                }
+                                .text-muted { color: #6c757d; }
+                                .section-header .section-title, .section-header .section-total {
+                                    display: inline-block;   /* Better than float */
+                                }
+                        </style>
+
+                        <t t-foreach="docs" t-as="o">
+                            <div class="payslip-container">
+                                <!-- Document Meta Record Identity -->
+                                <div class="document-id">
+                                    <span t-field="o.number"/>
+                                </div>
+
+                                <!-- Personal Identity Metadata Grid -->
+                                <table class="header-table">
+                                    <tr>
+                                        <td class="info-block">
+                                            <strong>Name:</strong> <span t-field="o.employee_id.name"/>
+                                            <br />
+                                            <strong>Employee No:</strong> <span t-field="o.employee_id.identification_id"/>
+                                            <br />
+                                            <strong>Position:</strong> <span t-field="o.employee_id.job_id.name"/>
+                                        </td>
+                                        <td style="width: 25px"></td>
+                                        <td class="logo-block">
+                                            <div class="company-details">
+                                                <div class="company-name"><span t-field="o.company_id.name"/></div>
+                                                <div t-field="o.company_id.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <!-- Employee Attendance/Contract Salary Grid -->
+                                <table class="meta-table">
+                                    <tr>
+                                        <td style="width: 18%">Monthly Fixed Rate:</td>
+                                        <td style="width: 15%" class="text-right">
+                                            <span t-esc="o.contract_id.wage" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}" />
+                                        </td>
+                                        <td style="width: 10%"></td>
+                                        <td style="width: 15%">Days/Month:</td>
+                                        <td><span t-field="o.x_regular_days" /></td>
+                                        <td style="width: 5%"></td>
+                                        <td style="width: 18%">Payroll Date Period:</td>
+                                        <td><span t-field="o.date_from" /> - <span t-field="o.date_to" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Half/Month:</td>
+                                        <td class="text-right">
+                                            <span t-esc="o.x_salary_half" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}" />
+                                        </td>
+                                        <td></td>
+                                        <td>Working Days:</td>
+                                        <td><span t-field="o.x_working_days" /></td>
+                                        <td></td>
+                                        <td>Date Received:</td>
+                                        <td><span t-field="o.create_date" t-options='{"widget": "date"}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Daily Rate:</td>
+                                        <td class="text-right">
+                                            <span t-esc="o.x_salary_daily" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}" />
+                                        </td>
+                                        <td></td>
+                                        <td>Working Hours:</td>
+                                        <td><span t-esc="'%.2f' % (o.x_working_days * 8)"/></td>
+                                        <td></td>
+                                        <!-- <td>2nd Payroll</td> -->
+                                        <td></td>
+                                    </tr>
+                                </table>
+
+                                <t t-set="grouped_data" t-value="o.get_grouped_salary_lines_enhanced()"/>
+
+                                <!-- ================= GROSS EARNINGS SECTION ================= -->
+                                <div class="section-header">
+                                    <span class="section-title">Gross Earnings</span>
+                                    <span class="section-total" t-esc="o.x_gross_total" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                </div>
+
+                                <table class="breakdown-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50%"></th>
+                                            <th style="width: 10%">HOURS</th>
+                                            <th style="width: 15%">RATE</th>
+                                            <th style="width: 25%">AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="grouped_data['GROSS'].items()" t-as="item">
+                                            <t t-set="subcategory" t-value="item[0]"/>
+                                            <t t-set="lines" t-value="item[1]"/>
+                                            <t t-if="lines">
+                                                <!-- Subcategory title row: spans all columns -->
+                                                <tr class="subcategory-row">
+                                                    <td colspan="4" style="background-color: #f0f0f0; font-weight: bold; padding: 5px;">
+                                                        <t t-esc="subcategory"/>
+                                                    </td>
+                                                </tr>
+                                                <!-- Each salary line gets its own row -->
+                                                <t t-foreach="lines" t-as="line">
+                                                    <tr>
+                                                        <td class="indented-item" style="padding-left: 20px;">
+                                                            <span t-field="line.name"/>
+                                                            <span class="text-muted" t-if="line.code">(<t t-esc="line.code"/>)</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span t-field="line.quantity"/>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            <span t-esc="line.amount" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            <span t-esc="line.total" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+
+                                <!-- ================= DEDUCTIONS SECTION ================= -->
+                                <div class="section-header">
+                                    <span class="section-title">Deductions</span>
+                                    <span class="section-total" t-esc="o.x_deduction_total" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                </div>
+
+                                <table class="breakdown-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50%"></th>
+                                            <th style="width: 10%">HOURS</th>
+                                            <th style="width: 12%">RATE</th>
+                                            <th style="width: 28%">AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="grouped_data['DEDUCTION'].items()" t-as="item">
+                                            <t t-set="subcategory" t-value="item[0]"/>
+                                            <t t-set="lines" t-value="item[1]"/>
+                                            <t t-if="lines">
+                                                <!-- Subcategory title row: spans all columns -->
+                                                <tr class="subcategory-row">
+                                                    <td colspan="4" style="background-color: #f0f0f0; font-weight: bold; padding: 5px;">
+                                                        <t t-esc="subcategory"/>
+                                                    </td>
+                                                </tr>
+                                                <!-- Each deduction line gets its own row -->
+                                                <t t-foreach="lines" t-as="line">
+                                                    <tr>
+                                                        <td class="indented-item" style="padding-left: 20px;">
+                                                            <span t-field="line.name"/>
+                                                            <span class="text-muted" t-if="line.code">(<t t-esc="line.code"/>)</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span t-field="line.quantity"/>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            <span t-esc="line.amount" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            <span t-esc="line.total" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+
+                                <!-- ================= NET PAY SECTION ================= -->
+                                <div class="net-pay-section section-header">
+                                    <span class="section-title">NET PAY</span>
+                                    <span class="section-total" t-esc="(o.x_gross_total or 0.0) - (o.x_deduction_total or 0.0)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

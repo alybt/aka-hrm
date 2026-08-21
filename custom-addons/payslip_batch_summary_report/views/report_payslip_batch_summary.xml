@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paperformat_payslip_batch_summary_landscape" model="report.paperformat">
+        <field name="name">Payslip Batch Summary Landscape</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">8</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_report_payslip_batch_summary" model="ir.actions.report">
+        <field name="name">Payslip Batch Summary</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">payslip_batch_summary_report.batch_summary</field>
+        <field name="report_file">payslip_batch_summary_report.batch_summary</field>
+        <field name="paperformat_id" ref="paperformat_payslip_batch_summary_landscape"/>
+        <field name="binding_model_id" ref="payroll.model_hr_payslip_run"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="batch_summary" name="Payslip Batch Summary">
+        <t t-call="web.html_container">
+            <t t-call="web.layout">
+                <div class="page">
+                    <style type="text/css">
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+
+                        .payroll-container {
+                            width: 100%;
+                            background: white;
+                            padding: 10px;
+                            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+                            /* No border – already 0 */
+                        }
+
+                        .company-header {
+                            border: none !important;
+                            padding-bottom: 12px;
+                            margin-bottom: 14px;
+                            width: 100%;
+                        }
+
+                        .company-info h2 {
+                            font-size: 1.4rem;
+                            font-weight: 700;
+                            letter-spacing: -0.3px;
+                            color: #0f172a;
+                            text-transform: uppercase;
+                        }
+
+                        .company-info p {
+                            color: #475569;
+                            font-size: 0.82rem;
+                            margin-top: 4px;
+                            line-height: 1.3;
+                        }
+
+                        .payroll-period-block h1 {
+                            font-size: 1.25rem;
+                            font-weight: 800;
+                            color: #0f172a;
+                            text-transform: uppercase;
+                            letter-spacing: 0.3px;
+                        }
+
+                        .payroll-period-block p {
+                            font-size: 0.82rem;
+                            font-weight: 600;
+                            color: #2563eb;
+                            margin-top: 2px;
+                        }
+
+                        /* METRICS TABLE – NO BORDERS */
+                        .metrics-panel {
+                            padding: 6px 4px 10px 4px;
+                            margin-bottom: 16px;
+                            border: none !important;
+                            width: 100%;
+                        }
+
+                        .metrics-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: none !important;
+                        }
+
+                        .metrics-table td {
+                            border: none !important;
+                            padding: 4px 8px;
+                            font-size: 0.8rem;
+                            font-weight: 600;
+                            color: #475569;
+                            white-space: nowrap;
+                        }
+
+                        .metric-label {
+                            color: #334155;
+                            font-weight: 600;
+                        }
+
+                        .metric-value {
+                            font-weight: 700;
+                            color: #0f172a;
+                            margin-left: 4px;
+                        }
+
+                        /* PAYROLL TABLE – NO BORDERS */
+                        .table-wrapper {
+                            margin-bottom: 20px;
+                            border: none !important;
+                            background: white;
+                        }
+
+                        .payroll-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: none !important;
+                            font-size: 0.68rem;
+                        }
+
+                        .payroll-table th {
+                            background: #1e293b !important;
+                            color: white !important;
+                            font-weight: 600;
+                            padding: 8px 3px;
+                            border: none !important;
+                            text-align: center;
+                            text-transform: uppercase;
+                            font-size: 0.64rem;
+                        }
+
+                        .payroll-table td {
+                            border: none !important;
+                            padding: 5px 3px;
+                            text-align: center;
+                            vertical-align: middle;
+                            background-color: #ffffff;
+                            white-space: nowrap;
+                            color: #0f172a;
+                        }
+
+                        /* COLUMN SIZING DYNAMICS */
+                        .col-no { width: 30px; text-align: center !important; }
+                        .col-name { text-align: left !important; padding-left: 6px !important; font-weight: 600; }
+                        .col-rate { min-width: 80px; text-align: right !important; padding-right: 5px !important; }
+                        .col-amount { min-width: 75px; text-align: right !important; padding-right: 5px !important; }
+                        .col-small-num { min-width: 50px; text-align: right !important; padding-right: 5px !important; }
+
+                        .readonly-cell {
+                            background: #f1f5f9;
+                            font-weight: 600;
+                            color: #1e293b;
+                        }
+
+                        .col-netpay {
+                            font-weight: 700 !important;
+                            background: #cbd5e1 !important;
+                            color: #000000 !important;
+                        }
+
+                        /* TOTAL ROW – keep horizontal lines only */
+                        .total-row td {
+                            background: #e2e8f0 !important;
+                            font-weight: 800 !important;
+                            border-top: 2.5px solid #1e293b !important;
+                            border-bottom: 2.5px solid #1e293b !important;
+                            /* keep these to separate total row */
+                            color: #0f172a !important;
+                        }
+
+                        /* SIGNATURE AREA – now without top border */
+                        .signature-container {
+                            width: 100%;
+                            margin-top: 24px;
+                            border: none !important;
+                            padding-top: 16px;
+                            page-break-inside: avoid;
+                        }
+
+                        .signature-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            border: none !important;
+                        }
+
+                        .signature-table td {
+                            vertical-align: top;
+                            border: none !important;
+                        }
+
+                        .sign-block {
+                            width: 240px;
+                        }
+
+                        .sign-title {
+                            font-weight: 700;
+                            font-size: 0.78rem;
+                            color: #0f172a;
+                        }
+
+                        .sign-line {
+                            border-bottom: 1.5px solid #334155;
+                            margin: 35px 0 6px 0;
+                            width: 100%;
+                        }
+
+                        .sign-value {
+                            font-size: 0.78rem;
+                            font-weight: 700;
+                            color: #1e293b;
+                        }
+
+                        .position {
+                            font-size: 0.7rem;
+                            color: #475569;
+                            margin-top: 2px;
+                        }
+
+                        .grand-net-box {
+                            background-color: #1e293b;
+                            color: #ffffff;
+                            padding: 10px 16px;
+                            border-radius: 4px;
+                            display: inline-block;
+                            font-weight: bold;
+                            font-size: 0.85rem;
+                            text-align: center;
+                            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+                        }
+
+                        /* FORCE PRINT LANDSCAPE &amp; SCALING CORRECTIONS */
+                        @media print {
+                            body {
+                                background: white !important;
+                                -webkit-print-color-adjust: exact !important;
+                                print-color-adjust: exact !important;
+                            }
+                            .metrics-table td {
+                                border: none !important;
+                            }
+                        }
+                    </style>
+
+                    <div class="payroll-container" style="border: none !important;">
+                        <header class="company-header" style="border: none !important;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="vertical-align: bottom; border: none; text-align: left;">
+                                        <div class="company-info">
+                                            <h2><t t-esc="company.name"/></h2>
+                                            <p><t t-esc="company.x_single_line_address"/></p>
+                                        </div>
+                                    </td>
+                                    <td style="vertical-align: bottom; border: none; text-align: right;">
+                                        <div class="payroll-period-block">
+                                            <h1>
+                                                <t t-if="batch_date_from"><t t-esc="batch_date_from.strftime('%B %Y')"/></t>
+                                                <t t-else="">—</t>
+                                            </h1>
+                                            <p>
+                                                <t t-if="batch_date_from and batch_date_to">
+                                                    <t t-esc="batch_date_from.strftime('%b %d, %Y')"/> - <t t-esc="batch_date_to.strftime('%b %d, %Y')"/>
+                                                </t>
+                                                <t t-else="">—</t>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </header>
+
+                        <div class="metrics-panel" style="border: none !important;">
+                            <table class="metrics-table" style="border: none !important;">
+                                <tr>
+                                    <td class="metric-cell"><span class="metric-label">Work Days:</span><span class="metric-value"><t t-esc="'%.1f' % meta.get('work_days', 0)"/></span></td>
+                                    <td class="metric-cell"><span class="metric-label">Hour/Month:</span><span class="metric-value"><t t-esc="'%.1f' % meta.get('hour_month', 0)"/></span></td>
+                                    <td class="metric-cell"><span class="metric-label">Regular Hours:</span><span class="metric-value"><t t-esc="'%.1f' % meta.get('regular_hours', 0)"/></span></td>
+                                    <td class="metric-cell"><span class="metric-label">Regular Days:</span><span class="metric-value"><t t-esc="'%.1f' % meta.get('regular_days', 0)"/></span></td>
+                                    <td class="metric-cell"><span class="metric-label">Util Days/Month:</span><span class="metric-value"><t t-esc="'%.1f' % meta.get('util_days_month', 0)"/></span></td>
+                                    <td class="metric-cell"><span class="metric-label">Util Reg. Days:</span><span class="metric-value"><t t-esc="'%.1f' % meta.get('util_reg_days', 0)"/></span></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table class="payroll-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-no">No.</th>
+                                        <th class="col-name" style="min-width: 180px;">Employee Name</th>
+                                        <th class="col-rate">Monthly Rate</th>
+                                        <th class="col-rate">Half Month</th>
+                                        <th class="col-rate">Daily Rate</th>
+                                        <th class="col-small-num">Total Hours</th>
+                                        <th class="col-small-num">Hourly Rate</th>
+                                        <th class="col-amount">Add</th>
+                                        <th class="col-rate">Gross Pay</th>
+                                        <th class="col-small-num">Undertime Hrs</th>
+                                        <th class="col-amount">Undertime Amt</th>
+                                        <th class="col-amount">Cash Advance</th>
+                                        <th class="col-small-num">Pag-Ibig</th>
+                                        <th class="col-small-num">Philhealth</th>
+                                        <th class="col-small-num">SSS</th>
+                                        <th class="col-rate">Total Deduction</th>
+                                        <th class="col-rate">Net Pay</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="payslip_data" t-as="line">
+                                        <tr>
+                                            <td class="readonly-cell col-no"><t t-esc="line_index + 1"/></td>
+                                            <td class="col-name"><t t-esc="line['employee_name']"/></td>
+                                            <td class="col-rate"><t t-esc="line['monthly_rate']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="readonly-cell col-rate"><t t-esc="line['half_month']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="readonly-cell col-rate"><t t-esc="line['daily_rate']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="col-small-num"><t t-esc="'%.2f' % line['total_hours']"/></td>
+                                            <td class="readonly-cell col-small-num"><t t-esc="line['hourly_rate']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="col-amount"><t t-esc="line['add']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="readonly-cell col-rate"><t t-esc="line['gross']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="col-small-num"><t t-esc="'%.2f' % line['undertime_hrs']"/></td>
+                                            <td class="readonly-cell col-amount"><t t-esc="line['undertime_amt']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="col-amount"><t t-esc="line['cash_advance']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="col-small-num"><t t-esc="line['pagibig']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="col-small-num"><t t-esc="line['philhealth']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="col-small-num"><t t-esc="line['sss']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="readonly-cell col-rate"><t t-esc="line['total_deduction']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                            <td class="readonly-cell col-rate col-netpay"><t t-esc="line['netpay']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="total-row">
+                                        <td colspan="2" style="text-align: right; font-weight: 800; padding-right: 8px;">GRAND TOTAL:</td>
+                                        <td class="col-rate"><t t-esc="totals['monthly_rate']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td>—</td>
+                                        <td>—</td>
+                                        <td>—</td>
+                                        <td>—</td>
+                                        <td class="col-amount"><t t-esc="totals['add']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td class="col-rate"><t t-esc="totals['gross']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td>—</td>
+                                        <td class="col-amount"><t t-esc="totals['undertime_amt']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td class="col-amount"><t t-esc="totals['cash_advance']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td class="col-amount"><t t-esc="totals['pagibig']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td class="col-amount"><t t-esc="totals['philhealth']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td class="col-amount"><t t-esc="totals['sss']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td class="col-rate"><t t-esc="totals['total_deduction']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                        <td class="col-netpay"><t t-esc="totals['netpay']" t-options='{"widget": "monetary", "display_currency": currency}'/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div style="margin-top: 15px; margin-bottom: 20px; text-align: right;">
+                            <div class="grand-net-box">
+                                Grand Total Net Pay: <t t-esc="totals['netpay']" t-options='{"widget": "monetary", "display_currency": currency}'/>
+                            </div>
+                        </div>
+
+                        <footer class="signature-container" style="border: none !important;">
+                            <table class="signature-table" style="border: none !important;">
+                                <tr>
+                                    <td style="width: 50%; text-align: left;">
+                                        <div class="sign-block">
+                                            <div class="sign-title">Prepared by:</div>
+                                            <div class="sign-line"></div>
+                                            <div class="sign-value"><t t-esc="preparer_name"/></div>
+                                            <div class="position"><t t-esc="preparer_title"/></div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 50%; text-align: right;">
+                                        <div class="sign-block" style="margin-left: auto; text-align: left;">
+                                            <div class="sign-title">Approved Verified by:</div>
+                                            <div class="sign-line"></div>
+                                            <div class="sign-value"><t t-esc="approver_name"/></div>
+                                            <div class="position"><t t-esc="approver_title"/></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </footer>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

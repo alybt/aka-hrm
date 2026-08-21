@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_holiday_computation" model="ir.ui.view">
+        <field name="name">hr.payslip.form.holiday.computation</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Holiday Computation" name="holiday_computation">
+                    <group>
+                            <field name="x_hrly_regular_holiday"/>
+                            <field name="x_hrly_specialnw_holiday"/>
+                            <field name="x_hrly_specialw_holiday"/>
+                    </group>
+                    <group>
+                            <field name="x_total_regular_holiday_pay"/>
+                            <field name="x_total_specialnw_holiday_pay"/>
+                            <field name="x_total_specialw_holiday_pay"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

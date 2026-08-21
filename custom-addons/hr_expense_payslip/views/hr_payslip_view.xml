@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form View -->
+    <record id="hr_payslip_view_form_inherit_reimbursement" model="ir.ui.view">
+        <field name="name">hr.payslip.view.form.inherit.reimbursement</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet//group" position="inside">
+
+                <!-- Reimbursement Section -->
+                <group string="Reimbursements" name="reimbursement_section">
+
+                    <!-- Checkbox -->
+                    <field name="include_reimbursements" string="Include Reimbursements"/>
+
+                    <!-- Show only if enabled -->
+                    <group invisible="not include_reimbursements">
+
+                        <!-- Total -->
+                        <field name="x_reimbursement_total"
+                               string="Total Reimbursement"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+
+                        <!-- Optional: Show linked expenses -->
+                        <field name="expense_ids">
+                            <tree editable="false">
+                                <field name="name"/>
+                                <field name="total_amount"/>
+                                <field name="date"/>
+                            </tree>
+                        </field>
+
+                    </group>
+
+                </group>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Tree/List View -->
+    <record id="hr_payslip_view_tree_inherit_reimbursement" model="ir.ui.view">
+        <field name="name">hr.payslip.view.tree.inherit.reimbursement</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_tree"/>
+        <field name="arch" type="xml">
+
+            <field name="employee_id" position="after">
+                <field name="include_reimbursements" string="Reimbursements"/>
+            </field>
+
+        </field>
+    </record>
+
+</odoo>

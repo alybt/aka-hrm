@@ -1,0 +1,299 @@
+Actual Work Days:
+	[Regular days]Work Hours (Work Days * 8):
+
+
+taskkill /F /IM python.exe /T
+
+Regular Work Days(Month)[Working Days - Holiday Days]:
+Hours per month:
+
+Utilize days (per month)[Regular Days + Holiday Days]:
+Utilize Regular Days[Regular Days + Holiday Days - Absences]:
+
+Monthly Fixed Rate:
+Half A Month[Monthly Fixed Rate / 2]:
+Daily Rate[Regular Days / Monthly Fixed Rate]:
+Hourly Rate[Daily Rate / 8]:
+
+Total Worked Hours:
+    Regular Worked Hours:
+    Regular Holiday(Hour):
+    Special Non-Working Holiday(Hour):
+    Special Working Holiday(Hour):
+
+Overtime:
+    Regular Worked Hours:
+    Regular Holiday(Hour):
+    Special Non-Working Holiday(Hour):
+    Special Working Holiday(Hour):
+
+x_regular_days
+x_salary_daily
+x_salary_half
+
+x_working_days
+
+x_total_work_hours
+	x_worked_regular_hours
+	x_worked_regular_holiday_hours
+	x_worked_specialnw_holiday_hours
+	x_worked_specialw_holiday_hours
+
+x_overtime_work_hours
+	x_overtime_regular_hours
+	x_overtime_regular_holiday_hours
+	x_overtime_specialnw_holiday_hours
+	x_overtime_specialw_holiday_hours
+
+
+Monthly fixed Rate = contract wage
+Half A month = x_salary_half
+total Hrs = x_total_work_hours
+Rate per hour = x_salary_daily / 8
+Daily Rate = x_salary_daily
+
+Gross = Daily Rate * x_working_days
+
+Deduction
+
+
+Undertime
+Pagibig
+philhealth
+SSS
+
+Total Deduction
+Regular Day
+	OT = 125%
+Regular Holiday >
+	If Dont work = Still get 100 percent of the daily wage
+	If work = Double Pay
+	If Overtime 30% of the Hourly Holiday Rate
+	Hourly Rate = Hourly Rate * 2
+	OT = 260%
+Special Non Working Holidays
+	If Do not work: No Work No Pay Applies
+	If Work  = 130%
+	Work On A rest day = 150% daily Wage
+	Overtime = 30% of Hourly Special Holiday Rate
+	Hourly Rate = Hourly Rate * 2
+	 OT = 169%
+Special Working Holiday will be like a regular Workin Holiday
+
+
+Description - Code - Days - Hrs - Contract
+Working Days - DAY100 -(x_working_days) - -
+Working Hours - Hours100 - -(x_working_days*8) - -
+Regular Holiday (Day) - RHD100 - (x_regular_holiday_day) - --
+Special Non-Working Holiday (Day) - SNWHD100 - (x_specialnw_holiday_day) - --
+Special Working Holiday (Day) - SWHD100 - (x_specialnw_holiday_day) - --
+
+
+HRS
+
+Regular Holiday (Hour) - RHH00 - (x_regular_holiday_hrs) - --
+Special Non-Working Holiday (Hour) - SNWHH100 - (x_specialnw_holiday_hrs) - --
+Special Working Holiday (Hour) - SWHH100 - (x_specialnw_holiday_hrs) - --
+
+> Need to change the Working Days into "Work days"
+> Need to change the Regular Days into "Regular Work Days(month)"
+
+
+
+Work Days:
+[Regular days]Work Hours (Work Days * 8):
+
+Regular Work Days(Month)[Working Days - Holiday Days]:
+Hours per month:
+
+Utilize days (per month)[Regular Days + Holiday Days]:
+Utilize Regular Days[Regular Days + Holiday Days - Absences]:
+
+Monthly Fixed Rate:
+Half A Month[Monthly Fixed Rate / 2]:
+Daily Rate[Regular Days / Monthly Fixed Rate]:
+Hourly Rate[Daily Rate / 8]:
+
+Total Worked Hours:
+    Regular Worked Hours:
+    Regular Holiday(Hour):
+    Special Non-Working Holiday(Hour):
+    Special Working Holiday(Hour):
+
+Overtime:
+    Regular Worked Hours:
+    Regular Holiday(Hour):
+    Special Non-Working Holiday(Hour):
+    Special Working Holiday(Hour):
+
+
+Reimbursements:
+
+
+Gross Pay:[Daily Rate * Work Days]
+
+
+
+Next thing to do:
+
+> The OT and The Worked Hours to be in sync = Done
+
+
+
+> Add Contribution's ID in the Company if the Company was based on the Philippines
+	- Half way Done
+	- Input Boxes can be inserted with letter but cannot go thru
+	- but when editing live the numbers can be inserted exceedly but cannot save
+> Employee's Contribution ID = done
+> Philippine's Contribution
+> Payslip Layout in Print
+
+> Reimbursement in Payslip that is based on the contribution register
+> And Add other Allowances
+
+For Tommorow: May 04
+
+> Contribution on SSS, Philhealth, Pagibig Will be need to be Implemented in the Payslip using the checkbox in the Employee
+> Need to Edit the Printed Payslip Layout to be more organized and neat
+> Add the Reimbursement in the Payslip Layout
+>
+
+For Next Day: may 06
+
+> Label the Payslip isn't showing
+	1. Go to the Developer Mode in Adminstrator Account
+	2. Go to the Bug Icon and Edit View Form
+	3. Go to the Inherited View and Search for the Label that is not showing
+	4. Edit the Label
+		<label for="name of the field" string="label you wanted to"/>
+		// <label for="" string=""/>
+	5. Save and Refresh the Page
+> Finalize the Payslip Layout and its functionality
+
+> Add Other Things that is needed to be added in the Payslip Layout
+
+
+            # Available variables:
+            #-------------------------------
+            # payslip: hr.payslip object
+            # payslips: object containing payslips (browsable)
+            # employee: hr.employee object
+            # contract: hr.contract object
+            # rules: object containing the rules code (previously computed)
+            # categories: object containing the computed salary rule categories
+            #    (sum of amount of all rules belonging to that category).
+            # worked_days: object containing the computed worked days.
+            # inputs: object containing the computed inputs.
+            # payroll: object containing miscellaneous values related to payroll
+            # current_contract: object with values calculated from the current contract
+            # result_rules: object with a dict of qty, rate, amount an total of calculated rules
+            # tools: object that contain libraries and tools that can be used in calculations
+
+            # Available compute variables:
+            #-------------------------------
+            # result: returned value have to be set in the variable 'result'
+            # result_rate: the rate that will be applied to "result".
+            # result_qty: the quantity of units that will be multiplied to "result".
+            # result_name: if this variable is computed, it will contain the name of the line.
+
+            # Example:
+            #-------------------------------
+            # result = contract.wage * 0.10
+
+            C:\nssm\win64
+➜ .\venv\Scripts\python.exe odoo\odoo-bin -c odoo.conf -d odoo
+
+> Dashboard for all of the Batch of Employees' Payroll Per Batch
+> Make a present for Salary Rules' Category and Unable to add another GROSS, DEDUCTION, and Summary
+> Disable Apps and redirect to the homepage of the
+> Make another Homepage
+
+May 21:
+    1.  Payslip Batch Added (payslip_batch)
+            - Can Compute all of the
+            - Confirm All
+            - Cancel All
+    2.  Refund Button for the Payslip so it will not appear
+            Employee Payslip:  <button string="Refund" name="refund_sheet" invisible="state != 'done' or refunded_id" type="object"/>
+    3.  Change the Report Layout in Payslip Report
+    4.  There's no variable for Days per Month
+    5.
+
+May 28:
+1. SALARY CATEGORIES/ PAYSLIP REPORT
+    - Create a new model for the Salary Categories
+    - Add the Salary Categories in the Payslip Report
+    - Add the Salary Categories in the Payslip Report Layout
+    # In your payslip
+    payslip = self.env['hr.payslip'].browse(1)
+    grouped = payslip.get_grouped_salary_lines_enhanced()
+
+    # Access the groups
+    working_hours = grouped['GROSS']['Working Hours']
+    others_gross = grouped['GROSS']['Others']
+    undertime = grouped['DEDUCTION']['Undertime']
+    others_deduction = grouped['DEDUCTION']['Others']
+
+    QWEB:
+        <t t-call="web.html_container">
+        </t>
+2. Finally finish the Payslip Report Layout and its Functionality
+
+34-1234567-8
+12-012345678-9
+1212-3456-7890
+
+
+
+Next thing to do:
+    1. Add Print Button to the Batch Payslip
+    2. Fix the Layout of the Payslip Batch
+    3. Make so if there's a minus on the net pay it will not proceed to confirm it or not
+payslip.x_philhealth_amount_display
+    4. Found Bug in the Payslip the Contribution wasnt check but still appears in the Payslip Report
+
+June 04
+    1. Make the Print button in the Batch Payslip
+    2. Fix the layout of the batch Payslip
+    3. Added new stuff like the x_gross_amount_display and x_deduction_amount_display in the Payslip Report
+
+June 11:
+1. Made a print mockup
+
+June 18:
+1. Theres A Print Button for the Summary Report of the Batch Payslip
+2. Data Still not connecting in the Expense Maybe that's odoo problem
+3.
+
+1. Parsing of Data, LIKE PDF, EXCEL, CSV, Images, ETC, like save it on the program but not totally save it
+2. Protect of insertation and automation of login
+3.
+
+June 25:
+1. Add A Proper Batch Payslip Report Layout And Function but cannot be viewed as seperate tab and just exporting details
+
+To Fix:
+    1. Print Summary of the Batch Payslip
+    2. Fix the Expense Connection, it has it but it wasnt working or correctly connected to Payslip and its not updating the Expense report when the Payslip got confirmed or updated.
+    4. Add Status in Batch Payslips so the User can easily identify if the Batch Payslip is already Confirmed or not
+    5. In Payslip summary report:
+        - Click the Button Print Summary Report
+        - It will Asked On Who will approve the Payslip Summary Report
+        - After Choosing the Approver, it will Print the Payslip Summary Report with the Approver's Name and The Employee's who generated the Payslip Summary Report
+    6. Try the negative net pay and see if it will not proceed to confirm it or not
+    7. Batch Payslip Report / Payslip cannot be generated if...
+        - The same month of the payslip already exist in the system for the same employee
+        - The payslip is already exist in the system for the same employee with the same month
+    8. Batch Payslip Report / Payslip cannot be printed if..
+        - There's a negative net pay in the system for the batch payslip or the individual payslip
+        - The batch payslip or the individual payslip is not yet confirmed
+    9. Deleted or Archive some unncessary fields or tabs in the system
+    10. Position of The Customed Salary Computation Tab in the Payslip Form View
+    11. Add Functionality in Payslip Batch Status
+    12. http://localhost:8069/web?debug=1#id=436&cids=1&menu_id=31&action=19&model=ir.model&view_type=form
+    13. Status of Payslip Batch Report
+        - Draft
+        - Confirmed
+        - Cancelled
+        - Done
+    14.

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Disable Discuss root menu -->
+    <record id="hr_employee_medical_examination.hr_employee_medical_examination_all" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- (Optional) Disable Discuss client action
+    <record id="mail.action_discuss" model="ir.actions.client">
+        <field name="active" eval="False"/>
+    </record> -->
+
+</odoo>

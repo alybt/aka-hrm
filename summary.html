@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Payroll Register Template</title>
+    <style>
+      :root {
+        --bg-dark: #1e1e1e;
+        --container-bg: #ffffff;
+        --header-bg: #e0e0e0;
+        --table-header-bg: #d4d4d4;
+        --input-bg: #e8e8e8;
+        --text-color: #333333;
+        --border-color: #cccccc;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .payroll-container {
+        background-color: var(--container-bg);
+        width: 100%;
+        max-width: 1400px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+      }
+
+      /* Top Header Section */
+      .company-header {
+        background-color: var(--header-bg);
+        text-align: center;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+      }
+
+      .company-header h1 {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #000;
+        margin-bottom: 5px;
+      }
+
+      .company-header p {
+        font-size: 14px;
+        color: var(--text-color);
+        line-height: 1.4;
+      }
+
+      /* Summary Metadata Row */
+      .meta-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+        background: #fafafa;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .meta-label {
+        white-space: nowrap;
+        margin-right: 8px;
+      }
+
+      .meta-box {
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        height: 28px;
+        width: 80px;
+        flex-grow: 0;
+      }
+
+      /* Table Container Styling */
+      .table-responsive {
+        overflow-x: auto;
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+        text-align: center;
+      }
+
+      th {
+        background-color: var(--table-header-bg);
+        color: #000;
+        font-weight: 600;
+        padding: 10px 4px;
+        border-bottom: 2px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        vertical-align: middle;
+        line-height: 1.2;
+      }
+
+      td {
+        padding: 12px 4px;
+        border-bottom: 1px solid #eeeeee;
+        border-right: 1px solid #eeeeee;
+        height: 40px; /* Provides space matching the empty container height */
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      th:last-child,
+      td:last-child {
+        border-right: none;
+      }
+
+      /* Column Specific Width Tweaks */
+      .col-no {
+        width: 35px;
+      }
+      .col-name {
+        width: 140px;
+        text-align: left;
+        padding-left: 8px;
+      }
+
+      /* Total Row Styling */
+      .total-row-banner {
+        background-color: var(--header-bg);
+        padding: 10px;
+        font-weight: bold;
+        font-size: 13px;
+        border: 1px solid var(--border-color);
+        margin-bottom: 20px;
+      }
+
+      /* Footer / Signatures Area */
+      .payroll-footer {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 0 10px;
+      }
+
+      .signature-block {
+        width: 250px;
+      }
+
+      .signature-label {
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 50px; /* Space for physical signature */
+      }
+
+      .signature-line {
+        border-bottom: 1px solid #000;
+        margin-bottom: 5px;
+      }
+
+      .signature-title {
+        font-size: 12px;
+        color: #555;
+      }
+
+      .grand-net-total {
+        text-align: right;
+        font-size: 14px;
+        font-weight: bold;
+        align-self: flex-start;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="payroll-container">
+      <!-- Company Header Block -->
+      <header class="company-header">
+        <h1>COMPANY</h1>
+        <p>Unit 1, 123 Floor, 123 Building, 123 Mabini Street,<br />Barangay San Isidro, Zamboanga City,</p>
+      </header>
+
+      <!-- Meta-Summary Info Ribbon -->
+      <section class="meta-summary-grid">
+        <div class="meta-item">
+          <span class="meta-label">Work Days:</span>
+          <div class="meta-box"></div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Hour/Month:</span>
+          <div class="meta-box"></div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Regular Hours:</span>
+          <div class="meta-box"></div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Regular Days:</span>
+          <div class="meta-box"></div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Util Days/ Month:</span>
+          <div class="meta-box"></div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Util Reg. Days:</span>
+          <div class="meta-box"></div>
+        </div>
+      </section>
+
+      <!-- Main Payroll Register Table Data -->
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-no">No.</th>
+              <th class="col-name">Employee Name</th>
+              <th>Monthly Rate</th>
+              <th>Half Month</th>
+              <th>Daily Rate</th>
+              <th>Total Hours</th>
+              <th>Hourly Rate</th>
+              <th>Add</th>
+              <th>Gross</th>
+              <th>Undertime Hours</th>
+              <th>Undertime Amount</th>
+              <th>Cash Advance</th>
+              <th>Pag-Ibig</th>
+              <th>Philhealth</th>
+              <th>SSS</th>
+              <th>Total Deduction</th>
+              <th>NetPay</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Placeholder row 1 to showcase structure -->
+            <tr>
+              <td>1</td>
+              <td class="col-name"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <!-- Placeholder row 2 -->
+            <tr>
+              <td>2</td>
+              <td class="col-name"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <!-- Placeholder row 3 -->
+            <tr>
+              <td>3</td>
+              <td class="col-name"></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Running Break Banner Total -->
+      <div class="total-row-banner">
+        <span>Total</span>
+      </div>
+
+      <!-- Bottom Signatures & Net Pay Summary Summary -->
+      <footer class="payroll-footer">
+        <div class="signature-block">
+          <div class="signature-label">Prepared by:</div>
+          <div class="signature-line"></div>
+          <div class="signature-title">Employee Position</div>
+        </div>
+
+        <div class="grand-net-total">Total of Net Pay: _______________</div>
+
+        <div class="signature-block">
+          <div class="signature-label">Prepared by:</div>
+          <div class="signature-line"></div>
+          <div class="signature-title">Employee Position</div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

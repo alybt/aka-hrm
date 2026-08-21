@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_undertime_computation" model="ir.ui.view">
+        <field name="name">hr.payslip.form.undertime.computation</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Undertime Computation" name="undertime_computation">
+                    <group>
+                        <label for="x_undertime_hrs" string="Undertime Penalty"/>
+                        <div class="o_row">
+                            <field name="x_undertime_hrs" class="oe_inline"/>
+                            <span> Hours = </span>
+                            <field name="x_undertime_amount" class="oe_inline" widget="monetary"/>
+                        </div>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

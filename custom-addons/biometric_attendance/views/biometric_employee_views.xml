@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Employee Form View -->
+    <record id="view_hr_employee_form_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add button to the button box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_register_biometric" type="object"
+                        class="oe_stat_button" icon="fa-fingerprint"
+                        help="Register for Biometric Device">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Biometric</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Add Biometric Devices tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Biometric Devices" name="biometric_devices_page">
+                    <group string="Biometric Registrations">
+                        <field name="biometric_registrations" nolabel="1">
+                            <tree>
+                                <field name="device_id"/>
+                                <field name="user_id_in_device"/>
+                                <field name="status" widget="badge"/>
+                                <field name="registration_date"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Employee Tree View -->
+    <record id="view_hr_employee_tree_inherit_biometric" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherit.biometric</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="biometric_registrations" string="Biometric" nolabel="1"/>
+            </field>
+        </field>
+    </record>
+</odoo>

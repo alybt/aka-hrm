@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_payslip_ot_hours_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.form.ot.breakdown</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="OverTime Breakdown" name="ot_hours_breakdown">
+                    <group>
+                        <group string="Regular &amp; Holiday OT">
+                            <field name="x_ot_regular_hours" widget="float_time"/>
+                            <field name="x_ot_regular_holiday_hours" widget="float_time"/>
+                        </group>
+                        <group string="Special Holiday OT">
+                            <field name="x_ot_specialnw_holiday_hours" widget="float_time"/>
+                            <field name="x_ot_specialw_holiday_hours" widget="float_time"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

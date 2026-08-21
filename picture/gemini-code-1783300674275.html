@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payslip Batch Summary Preview</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f8fafc;
+            padding: 20px;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        /* Simulates the landscape A4 page container */
+        .page {
+            width: 297mm;
+            min-height: 210mm;
+            margin: 0 auto;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .payroll-container {
+            width: 100%;
+            background: white;
+            padding: 10px;
+        }
+
+        .company-header {
+            border-bottom: 0px solid #1e293b;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+            width: 100%;
+        }
+
+        .company-info h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #0f172a;
+            text-transform: uppercase;
+        }
+
+        .company-info p {
+            color: #475569;
+            font-size: 0.82rem;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        .payroll-period-block h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .payroll-period-block p {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #2563eb;
+            margin-top: 2px;
+        }
+
+        /* METRICS TABLE – NO BORDERS */
+        .metrics-panel {
+            padding: 6px 4px 10px 4px;
+            margin-bottom: 16px;
+            border: none;
+            width: 100%;
+        }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .metrics-table td {
+            border: none;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        .metric-label {
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: #0f172a;
+            margin-left: 4px;
+        }
+
+        /* PAYROLL TABLE – NO BORDERS */
+        .table-wrapper {
+            margin-bottom: 20px;
+            background: white;
+            overflow-x: auto;
+        }
+
+        .payroll-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.68rem;
+        }
+
+        .payroll-table th {
+            background: #1e293b !important;
+            color: white !important;
+            font-weight: 600;
+            padding: 8px 3px;
+            border: none;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 0.64rem;
+        }
+
+        .payroll-table td {
+            border: none;
+            padding: 5px 3px;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #ffffff;
+            white-space: nowrap;
+            color: #0f172a;
+        }
+
+        /* COLUMN SIZING DYNAMICS */
+        .col-no { width: 30px; text-align: center !important; }
+        .col-name { text-align: left !important; padding-left: 6px !important; font-weight: 600; }
+        .col-rate { min-width: 80px; text-align: right !important; padding-right: 5px !important; }
+        .col-amount { min-width: 75px; text-align: right !important; padding-right: 5px !important; }
+        .col-small-num { min-width: 50px; text-align: right !important; padding-right: 5px !important; }
+
+        .readonly-cell {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .col-netpay {
+            font-weight: 700 !important;
+            background: #cbd5e1 !important;
+            color: #000000 !important;
+        }
+
+        /* TOTAL ROW – keep horizontal lines only */
+        .total-row td {
+            background: #e2e8f0 !important;
+            font-weight: 800 !important;
+            border-top: 2.5px solid #1e293b !important;
+            border-bottom: 2.5px solid #1e293b !important;
+            color: #0f172a !important;
+        }
+
+        /* SIGNATURE AREA – now without top border */
+        .signature-container {
+            width: 100%;
+            margin-top: 24px;
+            border-top: 0px dashed #94a3b8;
+            padding-top: 16px;
+            page-break-inside: avoid;
+        }
+
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .signature-table td {
+            vertical-align: top;
+            border: none;
+        }
+
+        .sign-block {
+            width: 240px;
+        }
+
+        .sign-title {
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #0f172a;
+        }
+
+        .sign-line {
+            border-bottom: 1.5px solid #334155;
+            margin: 35px 0 6px 0;
+            width: 100%;
+        }
+
+        .sign-value {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .position {
+            font-size: 0.7rem;
+            color: #475569;
+            margin-top: 2px;
+        }
+
+        .grand-net-box {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-align: center;
+            box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                padding: 0;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .page {
+                width: 100%;
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+            .metrics-table td {
+                border: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <div class="payroll-container">
+
+            <header class="company-header">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="vertical-align: bottom; border: none; text-align: left;">
+                            <div class="company-info">
+                                <h2>Nexus Tech Solutions Inc.</h2>
+                                <p>32nd Street, Bonifacio Global City, Taguig City, 1634 Metro Manila, Philippines</p>
+                            </div>
+                        </td>
+                        <td style="vertical-align: bottom; border: none; text-align: right;">
+                            <div class="payroll-period-block">
+                                <h1>July 2026</h1>
+                                <p>Jul 01, 2026 - Jul 15, 2026</p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </header>
+
+            <div class="metrics-panel">
+                <table class="metrics-table">
+                    <tr>
+                        <td class="metric-cell"><span class="metric-label">Work Days:</span><span class="metric-value">11.0</span></td>
+                        <td class="metric-cell"><span class="metric-label">Hour/Month:</span><span class="metric-value">176.0</span></td>
+                        <td class="metric-cell"><span class="metric-label">Regular Hours:</span><span class="metric-value">88.0</span></td>
+                        <td class="metric-cell"><span class="metric-label">Regular Days:</span><span class="metric-value">11.0</span></td>
+                        <td class="metric-cell"><span class="metric-label">Util Days/Month:</span><span class="metric-value">22.0</span></td>
+                        <td class="metric-cell"><span class="metric-label">Util Reg. Days:</span><span class="metric-value">11.0</span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="payroll-table">
+                    <thead>
+                        <tr>
+                            <th class="col-no">No.</th>
+                            <th class="col-name" style="min-width: 180px;">Employee Name</th>
+                            <th class="col-rate">Monthly Rate</th>
+                            <th class="col-rate">Half Month</th>
+                            <th class="col-rate">Daily Rate</th>
+                            <th class="col-small-num">Total Hours</th>
+                            <th class="col-small-num">Hourly Rate</th>
+                            <th class="col-amount">Add</th>
+                            <th class="col-rate">Gross Pay</th>
+                            <th class="col-small-num">Undertime Hrs</th>
+                            <th class="col-amount">Undertime Amt</th>
+                            <th class="col-amount">Cash Advance</th>
+                            <th class="col-small-num">Pag-Ibig</th>
+                            <th class="col-small-num">Philhealth</th>
+                            <th class="col-small-num">SSS</th>
+                            <th class="col-rate">Total Deduction</th>
+                            <th class="col-rate">Net Pay</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="readonly-cell col-no">1</td>
+                            <td class="col-name">Juan Dela Cruz</td>
+                            <td class="col-rate">₱45,000.00</td>
+                            <td class="readonly-cell col-rate">₱22,500.00</td>
+                            <td class="readonly-cell col-rate">₱2,045.45</td>
+                            <td class="col-small-num">88.00</td>
+                            <td class="readonly-cell col-small-num">₱255.68</td>
+                            <td class="col-amount">₱1,500.00</td>
+                            <td class="readonly-cell col-rate">₱24,000.00</td>
+                            <td class="col-small-num">2.00</td>
+                            <td class="readonly-cell col-amount">₱511.36</td>
+                            <td class="col-amount">₱0.00</td>
+                            <td class="col-small-num">₱100.00</td>
+                            <td class="col-small-num">₱1,125.00</td>
+                            <td class="col-small-num">₱2,025.00</td>
+                            <td class="readonly-cell col-rate">₱3,761.36</td>
+                            <td class="readonly-cell col-rate col-netpay">₱20,238.64</td>
+                        </tr>
+                        <tr>
+                            <td class="readonly-cell col-no">2</td>
+                            <td class="col-name">Maria Clara Santos</td>
+                            <td class="col-rate">₱60,000.00</td>
+                            <td class="readonly-cell col-rate">₱30,000.00</td>
+                            <td class="readonly-cell col-rate">₱2,727.27</td>
+                            <td class="col-small-num">85.50</td>
+                            <td class="readonly-cell col-small-num">₱340.91</td>
+                            <td class="col-amount">₱0.00</td>
+                            <td class="readonly-cell col-rate">₱30,000.00</td>
+                            <td class="col-small-num">2.50</td>
+                            <td class="readonly-cell col-amount">₱852.28</td>
+                            <td class="col-amount">₱2,000.00</td>
+                            <td class="col-small-num">₱100.00</td>
+                            <td class="col-small-num">₱1,500.00</td>
+                            <td class="col-small-num">₱2,700.00</td>
+                            <td class="readonly-cell col-rate">₱7,152.28</td>
+                            <td class="readonly-cell col-rate col-netpay">₱22,847.72</td>
+                        </tr>
+                        <tr>
+                            <td class="readonly-cell col-no">3</td>
+                            <td class="col-name">Mark Angelo Silang</td>
+                            <td class="col-rate">₱32,000.00</td>
+                            <td class="readonly-cell col-rate">₱16,000.00</td>
+                            <td class="readonly-cell col-rate">₱1,454.55</td>
+                            <td class="col-small-num">88.00</td>
+                            <td class="readonly-cell col-small-num">₱181.82</td>
+                            <td class="col-amount">₱800.00</td>
+                            <td class="readonly-cell col-rate">₱16,800.00</td>
+                            <td class="col-small-num">0.00</td>
+                            <td class="readonly-cell col-amount">₱0.00</td>
+                            <td class="col-amount">₱500.00</td>
+                            <td class="col-small-num">₱100.00</td>
+                            <td class="col-small-num">₱800.00</td>
+                            <td class="col-small-num">₱1,440.00</td>
+                            <td class="readonly-cell col-rate">₱2,840.00</td>
+                            <td class="readonly-cell col-rate col-netpay">₱13,960.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="2" style="text-align: right; font-weight: 800; padding-right: 8px;">GRAND TOTAL:</td>
+                            <td class="col-rate">₱137,000.00</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td class="col-amount">₱2,300.00</td>
+                            <td class="col-rate">₱70,800.00</td>
+                            <td>—</td>
+                            <td class="col-amount">₱1,363.64</td>
+                            <td class="col-amount">₱2,500.00</td>
+                            <td class="col-amount">₱300.00</td>
+                            <td class="col-amount">₱3,425.00</td>
+                            <td class="col-amount">₱6,165.00</td>
+                            <td class="col-rate">₱13,753.64</td>
+                            <td class="col-netpay">₱57,046.36</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div style="margin-top: 15px; margin-bottom: 20px; text-align: right;">
+                <div class="grand-net-box">
+                    Grand Total Net Pay: ₱57,046.36
+                </div>
+            </div>
+
+            <footer class="signature-container">
+                <table class="signature-table">
+                    <tr>
+                        <td style="width: 50%; text-align: left;">
+                            <div class="sign-block">
+                                <div class="sign-title">Prepared by:</div>
+                                <div class="sign-line"></div>
+                                <div class="sign-value">Jane Doe</div>
+                                <div class="position">Payroll Specialist</div>
+                            </div>
+                        </td>
+                        <td style="width: 50%; text-align: right;">
+                            <div class="sign-block" style="margin-left: auto; text-align: left;">
+                                <div class="sign-title">Approved Verified by:</div>
+                                <div class="sign-line"></div>
+                                <div class="sign-value">John Smith</div>
+                                <div class="position">HR Manager</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html>

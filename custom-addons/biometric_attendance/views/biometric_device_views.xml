@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_biometric_device_tree" model="ir.ui.view">
+        <field name="name">biometric.device.tree</field>
+        <field name="model">biometric.device</field>
+        <field name="arch" type="xml">
+            <tree string="Biometric Devices" decoration-success="device_status == 'connected'" decoration-warning="device_status == 'draft'" decoration-danger="device_status in ['disconnected','error']">
+                <field name="name"/>
+                <field name="device_ip"/>
+                <field name="device_model"/>
+                <field name="device_status" widget="badge"/>
+                <field name="total_users"/>
+                <field name="last_sync"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_biometric_device_form" model="ir.ui.view">
+        <field name="name">biometric.device.form</field>
+        <field name="model">biometric.device</field>
+        <field name="arch" type="xml">
+            <form string="Biometric Device">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_test_connection" type="object"
+                                class="oe_stat_button" icon="fa-plug"
+                                help="Test device connection"
+                                invisible="device_status == 'connected'">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Test Connection</span>
+                            </div>
+                        </button>
+                        <button name="action_sync_employees" type="object"
+                                class="oe_stat_button" icon="fa-users"
+                                help="Sync employees from device"
+                                invisible="device_status != 'connected'">
+                            <div class="o_stat_info">
+                                <field name="total_users"/>
+                                <span class="o_stat_text">Users</span>
+                            </div>
+                        </button>
+                        <button name="action_sync_attendance" type="object"
+                                class="oe_stat_button" icon="fa-clock-o"
+                                help="Sync attendance logs"
+                                invisible="device_status != 'connected'">
+                            <div class="o_stat_info">
+                                <field name="today_attendance"/>
+                                <span class="o_stat_text">Today</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <widget name="web_ribbon" title="Connected" bg_color="bg-success" invisible="device_status != 'connected'"/>
+                    <widget name="web_ribbon" title="Disconnected" bg_color="bg-danger" invisible="device_status != 'disconnected'"/>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="device_ip"/>
+                            <field name="device_port"/>
+                            <field name="device_model"/>
+                        </group>
+                        <group>
+                            <field name="device_serial"/>
+                            <field name="device_status" widget="badge"/>
+                            <field name="last_sync"/>
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Settings">
+                            <group>
+                                <field name="connection_timeout"/>
+                                <field name="auto_sync"/>
+                                <field name="sync_interval" invisible="not auto_sync"/>
+                            </group>
+                        </page>
+                        <page string="Registered Employees">
+                            <field name="biometric_employee_ids">
+                                <tree>
+                                    <field name="employee_id"/>
+                                    <field name="user_id_in_device"/>
+                                    <field name="status" widget="badge"/>
+                                    <field name="registration_date"/>
+                                    <field name="fingerprint_count"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_biometric_device_search" model="ir.ui.view">
+        <field name="name">biometric.device.search</field>
+        <field name="model">biometric.device</field>
+        <field name="arch" type="xml">
+            <search string="Search Biometric Devices">
+                <field name="name"/>
+                <field name="device_ip"/>
+                <field name="device_serial"/>
+                <filter string="Connected" name="connected" domain="[('device_status', '=', 'connected')]"/>
+                <filter string="Disconnected" name="disconnected" domain="[('device_status', '=', 'disconnected')]"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'device_status'}"/>
+                    <filter string="Model" name="group_model" context="{'group_by': 'device_model'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_biometric_device" model="ir.actions.act_window">
+        <field name="name">Biometric Devices</field>
+        <field name="res_model">biometric.device</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_biometric_device_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure your biometric fingerprint devices
+            </p>
+            <p>
+                Add your fingerprint scanners to automatically track employee attendance.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_biometric_root" name="Biometrics" sequence="10"/>
+    <menuitem id="menu_biometric_devices" name="Devices" parent="menu_biometric_root"
+                action="action_biometric_device" sequence="10"/>
+</odoo>

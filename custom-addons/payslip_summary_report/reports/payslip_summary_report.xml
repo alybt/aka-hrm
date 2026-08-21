@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_payslip_summary_report" model="ir.actions.report">
+        <field name="name">Payslip Summary (Tabular)</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">payslip_summary_report.payslip_summary_template</field>
+        <field name="report_file">payslip_summary_report.payslip_summary_template</field>
+        <field name="attachment_use">False</field>
+    </record>
+</odoo>

@@ -1,0 +1,70 @@
+SETUP
+
+
+Installed Apps:
+    1. Employeee
+    2. Employee Contracts
+    3. Attendance
+    4. Time Off - If it has an error then you just exit it then reinstall it again it will went thru.
+    5. Expenses
+    6. Recruitment
+    7. Expenses
+    8. Half of Salary
+    9. HR Regular Days
+    10. Daily Rate
+    11. Philippines Public Holiday Type
+    12. HR Working Days
+
+Go to Attendance and Check the Count of Extra Hours And Add
+Favor in Company: 15 min
+Favor in Employee: 10 mins
+
+> In adding holidays You should go add the Working Hours first before adding the payroll Structure and Payroll Rules due to its not working when you add the payroll etc. before the holidays.
+
+
+Installed Apps:
+    1. Total Worked Hours
+    2. Payroll Accounting
+    3. HR Worked Hours
+    4. HR Actual Work Days Count
+    5. HR Worked OT
+    6. Company Contribution ID
+    7. Employee Contribution ID
+    8. time_bank
+    9. Contribution Manual
+    10. Holiday Computation
+    11. Payroll Undertime
+
+installed_modules = self.env['ir.module.module'].search([
+    ('name', '=', 'payroll'),
+    ('state', '=', 'installed')
+])
+print(f"payroll installed: {bool(installed_modules)}")
+
+How to create a user account in Odoo:
+    1. Go to Settings as Administrator
+    2. Under Users, click on "-> Manage Users"
+    3. Configure the user details such as Name, Email, and Access Rights
+    4. Save the user account
+    5. Go to the Employee's HR Information Tab
+    6. Under the Related user Field Pick the user account that you just created
+
+    Wrong python code defined for salary rule Regular Hours (BASIC) for employee John Doe.
+Here is the error received:
+
+SyntaxError('unterminated string literal (detected at line 3)', ('', 3, 36, 'result = payslip.x_salary_daily / 8"', 3, 36))
+
+result_rate = 100
+result_qty = payslip.x_working_days * 8
+result = payslip.x_salary_daily / 8
+
+result = 0
+result = payslip.x_total_regular_holiday_pay
+
+result = 0
+result = payslip.x_total_specialnw_holiday_pay
+
+result = 0
+result = payslip.x_total_specialw_holiday_pay
+
+result = payslip.x_reimbursement_total 

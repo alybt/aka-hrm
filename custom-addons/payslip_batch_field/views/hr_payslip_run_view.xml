@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payslip_run_form_inherit_calculated_columns" model="ir.ui.view">
+        <field name="name">r.payslip.run.form.inherit</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_run_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field" position="after">
+                <field name="contract_wage" optional="hide"/>
+                <field name="salary_half" optional="hide"/>
+                <field name="daily_rate" optional="show"/>
+                <field name="hourly_rate" optional="hide"/>
+                <field name="total_hours" optional="show"/>
+                <field name="undertime_hrs" optional="show"/>
+                <field name="undertime_cost" optional="show"/>
+                <field name="gross_pay" optional="show" sum="Total Gross Paid"/>
+                <field name="sss_amount" optional="show" sum="Total SSS"/>
+                <field name="philhealth_amount" optional="show" sum="Total PhilHealth"/>
+                <field name="pagibig_amount" optional="show" sum="Total Pag-IBIG"/>
+                <field name="deductions" optional="show" sum="Total Deductions"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

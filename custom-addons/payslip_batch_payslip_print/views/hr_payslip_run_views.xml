@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payslip_run_form_print_button" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.print.button</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_run_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_batch_payslips"
+                        type="object"
+                        icon="fa-print"
+                        string="Print All Payslips"
+                        class="btn-primary"
+                        groups="payroll.group_payroll_user"
+                        confirm="Print all payslips in this batch?"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

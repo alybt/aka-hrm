@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Payslip Run Form View -->
+    <record id="hr_payslip_run_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.batch.actions</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="payroll.hr_payslip_run_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add batch action buttons to the header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_batch_compute" type="object"
+                        string="Compute All"
+                        class="btn-primary"
+                        groups="payroll.group_payroll_user"
+                        confirm="This will compute all draft/verify payslips in this batch. Continue?"/>
+
+                <button name="action_batch_confirm" type="object"
+                        string="Confirm All"
+                        groups="payroll.group_payroll_user"
+                        confirm="This will confirm all draft payslips in this batch. Continue?"/>
+
+                <button name="action_batch_cancel" type="object"
+                        string="Cancel All"
+                        groups="payroll.group_payroll_manager"
+                        confirm="This will cancel all eligible payslips in this batch. Continue?"/>
+
+                <button name="action_batch_set_to_draft" type="object"
+                        string="Set to Draft All"
+                        groups="payroll.group_payroll_manager"
+                        confirm="This will set all cancelled payslips to draft. Continue?"/>
+
+                <button name="action_batch_refetch" type="object"
+                        string="Refetch All Data"
+                        groups="payroll.group_payroll_user"
+                        confirm="This will refresh data for all draft payslips. Continue?"/>
+            </xpath>
+
+            <!-- Add batch action buttons in the notebook as well -->
+            <!-- <xpath expr="//notebook" position="inside">
+                <page string="Batch Actions" name="batch_actions">
+                    <group>
+                        <group string="Bulk Operations">
+                            <button name="action_batch_compute" type="object"
+                                    string="📊 Compute All Payslips"
+                                    class="btn-primary"
+                                    groups="payroll.group_payroll_user"
+                                    help="Compute all draft/verify payslips in this batch"/>
+
+                            <button name="action_batch_confirm" type="object"
+                                    string="✅ Confirm All Payslips"
+                                    class="btn-success"
+                                    groups="payroll.group_payroll_user"
+                                    help="Confirm all draft payslips in this batch"/>
+
+                            <button name="action_batch_cancel" type="object"
+                                    string="❌ Cancel All Payslips"
+                                    class="btn-danger"
+                                    groups="payroll.group_payroll_manager"
+                                    help="Cancel all eligible payslips in this batch"/>
+
+                            <button name="action_batch_set_to_draft" type="object"
+                                    string="🔄 Set to Draft All"
+                                    groups="payroll.group_payroll_manager"
+                                    help="Set all cancelled payslips back to draft"/>
+
+                            <button name="action_batch_refetch" type="object"
+                                    string="🔄 Refetch All Data"
+                                    groups="payroll.group_payroll_user"
+                                    help="Refresh contract and employee data for all draft payslips"/>
+                        </group>
+
+                        <group string="Batch Statistics">
+                            <field name="slip_ids" readonly="1">
+                                <tree string="Payslips" editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="paid" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+            </xpath> -->
+        </field>
+    </record>
+
+    <!-- Extend Payslip Run Tree View -->
+    <!-- <record id="view_hr_payslip_run_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.run.tree.batch.actions</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="payroll.view_hr_payslip_run_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <header>
+                    <button name="action_batch_compute" type="object"
+                            string="Compute All"
+                            groups="payroll.group_payroll_user"/>
+                    <button name="action_batch_confirm" type="object"
+                            string="Confirm All"
+                            groups="payroll.group_payroll_user"/>
+                </header>
+            </xpath>
+        </field>
+    </record> -->
+</odoo>
